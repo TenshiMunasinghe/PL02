@@ -1,9 +1,15 @@
 #pragma once
 
+#include <stdio.h>
+
+// 2D point
 typedef struct
 {
-  float x;
-  float y;
+	float x;
+	float y;
 } Point;
 
-int isPointEqual(Point p1, Point p2);
+float distance(Point p1, Point p2);
+
+int readPoint(FILE *fin, Point *pPoint);
+void printPoint(FILE *fout, Point point);

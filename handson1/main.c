@@ -1,30 +1,36 @@
-#include <stdlib.h>
-#include "point.h"
 #include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+#include "Point.h"
+#include "Line.h"
+#include "Triangle.h"
 
 int main()
 {
+  // Implement by yourself with using types and functions
+  // from other modules of this project
+  // ...
   Point vertex[3];
+  Triangle triangle;
 
   for (int i = 0; i <= 2; i++)
   {
     printf("Enter coordinate of vertex %d (separate with a whitespace):", i + 1);
-    if (scanf("%f %f", &(vertex[i].x), &(vertex[i].y) != 2))
+    if (scanf("%f %f", &(vertex[i].x), &(vertex[i].y)) != 2)
     {
       printf("Invalid coordinate.\n");
       return EXIT_FAILURE;
     }
   }
+  printf("%f %f\n", vertex[0].x, vertex[0].y);
 
-  if (isPointEqual(vertex[0], vertex[1]) || isPointEqual(vertex[0], vertex[2]) || isPointEqual(vertex[1], vertex[2]))
+  if (constructTriangle(&triangle, vertex[0], vertex[1], vertex[2]) == 0)
   {
-    printf("Some vertexes are the same.\n");
+    printf("Failed to construct triangle.\n");
     return EXIT_FAILURE;
   }
 
-  // add isLine
-
-  float area = (vertex[0].x * (vertex[1].y - vertex[2].y) + vertex[1].x * (vertex[2].y - vertex[0].y) + vertex[2].x * (vertex[0].y - vertex[1].y)) / 2;
+  printTriangleInfo(triangle);
 
   return EXIT_SUCCESS;
-};
+}

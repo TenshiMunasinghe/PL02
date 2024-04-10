@@ -1,18 +1,25 @@
+#include <stdio.h>
 #include <math.h>
-#include "point.h"
 
-#define epsilon 0.01
+#include "Point.h"
 
-int isFloatEqual(float a, float b)
+float distance(Point p1, Point p2)
 {
-  if (fabs(a - b) <= epsilon)
-    return 1;
-  return 0;
-};
+	return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+}
 
-int isPointEqual(Point p1, Point p2)
+int readPoint(FILE *fin, Point *pPoint)
 {
-  if (isFloatEqual(p1.x, p2.x) && isFloatEqual(p1.y, p2.y))
-    return 1;
-  return 0;
-};
+	int retScan = fscanf(fin, "%f %f", &(pPoint->x), &(pPoint->y));
+	if (retScan != 2)
+		return 0; // No point scanned
+
+	return 1; // We got one point
+}
+
+void printPoint(FILE *fout, Point point)
+{
+	// Implement by yourself
+	// ...
+	fprintf(fout, "(%f, %f)\n", point.x, point.y);
+}
