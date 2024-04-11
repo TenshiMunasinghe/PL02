@@ -1,13 +1,13 @@
-typedef {
+#pragma once
+
+typedef struct {
   int hour;
   int minute;
 } Time;
 
-typedef {
+typedef struct {
   char *id;
-  char *departurePoint;
-  char *destinationPoint;
-  Time departingTime;
-  Time arrivalTime;
+  char *location;
+  Time time;
 } Flight;
 
