@@ -1,8 +1,8 @@
+#include "flight.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "flight.h"
-#include "util.h"
 
 #define MAX_FLIGHT_COUNT 50
 #define FLIGHT_ID_LENGTH 6
@@ -10,56 +10,66 @@
 #define INPUT_DELIMETER " "
 #define TIME_DELIMETER ":"
 
-int parseSingleLine(char *line, char *flightInfo)
-{
-  char *id, *location;
-  Time time;
-
-  char *copiedLine = copyLine(line);
-  copiedLine = strtok(copiedLine, INPUT_DELIMETER);
-
-  id[0] = '\0'; // Initialize  buffer
-  location[0] = '\0';
-
-  if (copiedLine == NULL || strlen(copiedLine) >= FLIGHT_ID_LENGTH)
-  {
-    printf("Failed to parse flight ID.\n");
-    return 0;
-  }
-  strcpy(id, copiedLine);
-  copiedLine = strtok(NULL, INPUT_DELIMETER);
-
-  if (copiedLine == NULL || strlen(copiedLine) >= MAX_NAME_LENGTH)
-  {
-    printf("Failed to parse location name.\n");
-    return 0;
-  }
-  strcpy(location, copiedLine);
-
-  copiedLine = strtok(NULL, TIME_DELIMETER);
-
-  // if (isNum(copiedLine))
+int isValidTime(Time time) {
+  if (time.hour >= 0 && time.minute >= 0 && time.minute < 60)
+    return 1;
+  return 0;
 }
 
-int parseAllLines(FILE *fin, Flight *pList)
-{
-  char line[MAX_FLIGHT_COUNT + 1];
-  int count = 0;
+int parseFlightInfo(FILE *fin, Flight *pFlight) {
+  pFlight->time = (Time *)malloc(sizeof(Time));
+  return fscanf(fin, "%s %s %d:%d", pFlight->id, pFlight->location,
+                &(pFlight->time->hour), &(pFlight->time->minute));
+}
 
-  while (fgets(line, sizeof(line), fin))
-  {
-    count++;
-    if (!parseLine(line, pList))
-    {
-      printf("Error while parsing line %d\n", count);
-      exit(EXIT_FAILURE);
+int parseInput(int timeGap, char *departurePoint, char *destinationPoint) {
+  FILE *fArrival, *fDeparture;
+  Flight arrivalInfo, departureInfo;
+
+  fArrival = fopen("arrival.txt", "r");
+  fDeparture = fopen(("departure.txt"), "r");
+  printf("s\n");
+  // segmentation error here.
+  while (parseFlightInfo(fArrival, &arrivalInfo) != 4) {
+    printf("%s %s %d:%d\n", arrivalInfo.id, arrivalInfo.location,
+           arrivalInfo.time->hour, arrivalInfo.time->minute);
+    if (strcmp(arrivalInfo.location, departurePoint) != 0) {
+      continue;
     }
+    if (!isValidTime(*arrivalInfo.time)) {
+      printf("Invalid time for flight %s. Ignoring this flight...\n",
+             arrivalInfo.id);
+      continue;
+    }
+    // while (parseFlightInfo(fin, &departureInfo) == 4) {
+    // }
+    // rewind(fDeparture);
   };
-}
+  return 1;
+};
 
-int main()
-{
-  FILE *fin, *fout;
+int main() {
+  int timeGap;
+  char departurePoint[30], destinationPoint[30];
+
+  printf("Time gap in hours: ");
+  if (scanf("%d", &timeGap) != 1) {
+    printf("Invalid time gap.\n");
+    return EXIT_FAILURE;
+  }
+
+  printf("Enter your departure point: ");
+  if (scanf("%s", departurePoint) != 1) {
+    printf("Invalid departure point.\n");
+    return EXIT_FAILURE;
+  }
+
+  printf("Enter your destination point: ");
+  if (scanf("%s", destinationPoint) != 1) {
+    printf("Invalid destination point.\n");
+    return EXIT_FAILURE;
+  }
+  parseInput(timeGap, departurePoint, destinationPoint);
 
   return EXIT_SUCCESS;
 }

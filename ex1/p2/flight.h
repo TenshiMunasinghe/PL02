@@ -6,8 +6,7 @@ typedef struct {
 } Time;
 
 typedef struct {
-  char *id;
-  char *location;
-  Time time;
+  char id[10];
+  char location[30];
+  Time *time;
 } Flight;
-

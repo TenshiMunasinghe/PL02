@@ -1,0 +1,6 @@
+JA210 Barcelona 13:45
+LV2222 Frankfurt 15:10
+FV124 Barcelona 16:22
+AF345 Paris 17:20
+JA220 Barcelona 17:52
+BA457 London 18:30
