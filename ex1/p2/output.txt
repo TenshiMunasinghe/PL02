@@ -1,0 +1,5 @@
+JA210 Barcelona 13:45 JA4590 Tokyo 18:42
+JA210 Barcelona 13:45 JA2223 Tokyo 19:55
+FV124 Barcelona 16:22 JA4590 Tokyo 18:42
+FV124 Barcelona 16:22 JA2223 Tokyo 19:55
+JA220 Barcelona 17:52 JA2223 Tokyo 19:55

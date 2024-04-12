@@ -1,71 +1,35 @@
 #include "flight.h"
 #include "utils.h"
+#include "time.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_FLIGHT_COUNT 50
-#define FLIGHT_ID_LENGTH 6
-#define MAX_NAME_LENGTH 30
-#define INPUT_DELIMETER " "
-#define TIME_DELIMETER ":"
+int parseFlightInfo(FILE *fin, Flight *pFlight);
+int parseInput(float timeGap, char *departurePoint, char *destinationPoint);
 
-int isValidTime(Time time) {
-  if (time.hour >= 0 && time.minute >= 0 && time.minute < 60)
-    return 1;
-  return 0;
-}
-
-int parseFlightInfo(FILE *fin, Flight *pFlight) {
-  pFlight->time = (Time *)malloc(sizeof(Time));
-  return fscanf(fin, "%s %s %d:%d", pFlight->id, pFlight->location,
-                &(pFlight->time->hour), &(pFlight->time->minute));
-}
-
-int parseInput(int timeGap, char *departurePoint, char *destinationPoint) {
-  FILE *fArrival, *fDeparture;
-  Flight arrivalInfo, departureInfo;
-
-  fArrival = fopen("arrival.txt", "r");
-  fDeparture = fopen(("departure.txt"), "r");
-  printf("s\n");
-  // segmentation error here.
-  while (parseFlightInfo(fArrival, &arrivalInfo) != 4) {
-    printf("%s %s %d:%d\n", arrivalInfo.id, arrivalInfo.location,
-           arrivalInfo.time->hour, arrivalInfo.time->minute);
-    if (strcmp(arrivalInfo.location, departurePoint) != 0) {
-      continue;
-    }
-    if (!isValidTime(*arrivalInfo.time)) {
-      printf("Invalid time for flight %s. Ignoring this flight...\n",
-             arrivalInfo.id);
-      continue;
-    }
-    // while (parseFlightInfo(fin, &departureInfo) == 4) {
-    // }
-    // rewind(fDeparture);
-  };
-  return 1;
-};
-
-int main() {
-  int timeGap;
+int main()
+{
+  float timeGap;
   char departurePoint[30], destinationPoint[30];
 
   printf("Time gap in hours: ");
-  if (scanf("%d", &timeGap) != 1) {
+  if (scanf("%f", &timeGap) != 1)
+  {
     printf("Invalid time gap.\n");
     return EXIT_FAILURE;
   }
 
   printf("Enter your departure point: ");
-  if (scanf("%s", departurePoint) != 1) {
+  if (scanf("%s", departurePoint) != 1)
+  {
     printf("Invalid departure point.\n");
     return EXIT_FAILURE;
   }
 
   printf("Enter your destination point: ");
-  if (scanf("%s", destinationPoint) != 1) {
+  if (scanf("%s", destinationPoint) != 1)
+  {
     printf("Invalid destination point.\n");
     return EXIT_FAILURE;
   }
@@ -73,3 +37,69 @@ int main() {
 
   return EXIT_SUCCESS;
 }
+
+int parseFlightInfo(FILE *fin, Flight *pFlight)
+{
+  if (fin == NULL || pFlight == NULL)
+    return 0;
+
+  return fscanf(fin, "%s %s %d:%d", pFlight->id, pFlight->location,
+                &pFlight->time->hour, &pFlight->time->minute);
+}
+
+int parseInput(float timeGap, char *departurePoint, char *destinationPoint)
+{
+  FILE *fArrival, *fDeparture, *fout;
+  Flight *arrivalInfo = initializeFlightInfo();
+  Flight *departureInfo = initializeFlightInfo();
+
+  fArrival = fopen("arrival.txt", "r");
+  fDeparture = fopen("departure.txt", "r");
+  fout = fopen("output.txt", "wt");
+
+  if (fArrival == NULL || fDeparture == NULL)
+  {
+    printf("Failed to read file.\n");
+    return 0;
+  }
+  printf("Available connected flights:\n");
+
+  while (parseFlightInfo(fArrival, arrivalInfo) == 4)
+  {
+    if (strcmp(arrivalInfo->location, departurePoint) != 0)
+      continue;
+
+    if (!isValidTime(*arrivalInfo->time))
+    {
+      printf("Invalid time for flight %s. Ignoring this flight...\n",
+             arrivalInfo->id);
+      continue;
+    }
+
+    while (parseFlightInfo(fDeparture, departureInfo) == 4)
+    {
+      if (strcmp(departureInfo->location, destinationPoint) != 0)
+        continue;
+
+      if (timeDifference(*departureInfo->time, *arrivalInfo->time) > timeGap)
+      {
+        char outputStr[50];
+
+        snprintf(outputStr, sizeof(outputStr), "%s %s %d:%d %s %s %d:%d\n", arrivalInfo->id, arrivalInfo->location,
+                 arrivalInfo->time->hour, arrivalInfo->time->minute, departureInfo->id, departureInfo->location,
+                 departureInfo->time->hour, departureInfo->time->minute);
+
+        printf("%s", outputStr);
+        fprintf(fout, "%s", outputStr);
+      }
+    }
+    rewind(fDeparture);
+  };
+
+  fclose(fArrival);
+  fclose(fDeparture);
+  freeFlightInfo(arrivalInfo);
+  freeFlightInfo(departureInfo);
+
+  return 1;
+};

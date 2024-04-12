@@ -2,6 +2,7 @@
   "files.associations": {
     "*.css": "css",
     "css": "css",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "string.h": "c"
   }
 }
