@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Complete the project following the Hands-on 1 discussion
+// and hints you can find in the source code comments
+
+#include "timing.h"
+
+int main()
+{
+	Time departure;
+	TimeSpan journey;
+
+	Time arrival;
+
+	if (requestTime(&departure) != 1)
+		return EXIT_FAILURE;
+
+	if (!isTimeValid(departure))
+	{
+		priintf("Illegal departure time.\n");
+		return EXIT_FAILURE;
+	}
+
+	// Print departure time to the console
+	// ...
+
+	// Request and print the journay tine (TimeSpan object) in similar manner
+	// as in the above code for requesting and printing departure time
+	// ...
+
+	// Compute arrival time for given departure and journey time
+	// using  addTimeSpan() function
+	// ...
+
+	// Check that the results as printed correctly,
+	// then modify this code with using printTime() function
+	printf("Arrival time on the day %d - %02d:%02d\n", arrival.day, arrival.hours, arrival.minutes);
+	return EXIT_SUCCESS;
+}
