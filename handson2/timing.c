@@ -35,6 +35,7 @@ int requestTimeSpan(TimeSpan *pTimeSpan) {
     printf("Illegal journey time input format\n");
     return 0;
   }
+
   if (hours < 0) {
     printf("Illegal journey hours (should not be negative)\n");
     return 0;
@@ -55,7 +56,6 @@ void printTimeSpan(TimeSpan time) {
   // Implement this function
   // ...
   Time duration;
-
   duration.day = time.minutes / (HOURS_IN_DAY * MINUTES_IN_HOUR);
   duration.hours =
       (time.minutes % (HOURS_IN_DAY * MINUTES_IN_HOUR)) / MINUTES_IN_HOUR;

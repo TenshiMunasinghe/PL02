@@ -20,16 +20,28 @@ int main() {
     return EXIT_FAILURE;
   }
 
+  arrival.day = departure.day;
+  arrival.hours = departure.hours;
+  arrival.minutes = departure.minutes;
+
   // Print departure time to the console
   // ...
+  printf("Departure time ");
+  printTime(departure);
+  printf("\n");
 
-  // Request and print the journay tine (TimeSpan object) in similar manner
+  // Request and print the journay time (TimeSpan object) in similar manner
   // as in the above code for requesting and printing departure time
   // ...
+  requestTimeSpan(&journey);
+  printf("Time span ");
+  printTimeSpan(journey);
+  printf("\n");
 
   // Compute arrival time for given departure and journey time
   // using  addTimeSpan() function
   // ...
+  addTimeSpan(&arrival, journey);
 
   // Check that the results as printed correctly,
   // then modify this code with using printTime() function
