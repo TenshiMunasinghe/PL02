@@ -1,7 +1,10 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "Date.h"
 #include "Person.h"
+#include "String_Oper.h"
 
 int countRecords(FILE *in) {
   int count = 0;
@@ -30,13 +33,18 @@ int loadRecordsFromTextFile(FILE *in, Person *all, int size) {
     // Stop program by using exit(1) if reading errors are detected.
     // ...
     Person *pPerson;
-    pPerson = (Person *)malloc(sizeof(Person));
-    if (all == NULL) {
+    pPerson = all + count;
+    if (pPerson == NULL) {
       printf("Memory allocation error\n");
-      return EXIT_FAILURE;
+      exit(1);
     }
 
     readPerson(in, pPerson);
+    if (!isDateLegal(&(pPerson->birthDate)) || !isValidName(pPerson->name) ||
+        !isValidId(pPerson->id)) {
+      printf("Illegal value read from input file.\n");
+      exit(1);
+    }
   }
   return count;
 }

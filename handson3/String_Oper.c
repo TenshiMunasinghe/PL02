@@ -1,7 +1,25 @@
 #include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 
-#include "String_Oper.h"
+bool isValidName(char *name) {
+  while (*name) {
+    if (!isalpha(*name))
+      return false;
+    name++;
+  }
+  return true;
+}
+
+bool isValidId(char *id) {
+  while (*id) {
+    if (!isalpha(*id) && !isdigit(*id)) {
+      return false;
+    }
+    id++;
+  }
+  return true;
+}
 
 // Names are words containing only letters
 int getName(FILE *in, char *name, int limit) {
