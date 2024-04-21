@@ -6,56 +6,51 @@
 #include "Person_Array.h"
 #include "Sort.h"
 
-int main()
-{
-	FILE *in;
-	Person *all;
-	int numOfPersons;
+int main() {
+  FILE *in;
+  Person *all;
+  int numOfPersons;
 
-	Date currentDate= { 2020, 4, 24};
-	
-	in = fopen("input.txt", "rt");
-	if (in == NULL)
-	{
-		printf("Unable to open input file\n");
-		return EXIT_FAILURE;
-	}
+  Date currentDate = {2020, 4, 24};
 
-	numOfPersons = countRecords(in);
-	if (numOfPersons == 0)
-	{
-		printf("No data in input file\n");
-		return EXIT_FAILURE;
-	}
+  in = fopen("input.txt", "rt");
+  if (in == NULL) {
+    printf("Unable to open input file\n");
+    return EXIT_FAILURE;
+  }
 
-	all = (Person *)malloc(numOfPersons * sizeof(Person));
-	if (all == NULL )
-	{
-		printf("Memory allocation error\n");
-		return EXIT_FAILURE;
-	}
+  numOfPersons = countRecords(in);
+  if (numOfPersons == 0) {
+    printf("No data in input file\n");
+    return EXIT_FAILURE;
+  }
 
-	rewind(in);
+  all = (Person *)malloc(numOfPersons * sizeof(Person));
+  if (all == NULL) {
+    printf("Memory allocation error\n");
+    return EXIT_FAILURE;
+  }
 
-	int count = loadRecordsFromTextFile(in, all, numOfPersons);
-	if (count != numOfPersons)
-	{
-		printf("Unknown error. Please contact the developer\n");
-		return EXIT_FAILURE;
-	}
+  rewind(in);
 
-	fclose(in);
+  int count = loadRecordsFromTextFile(in, all, numOfPersons);
+  if (count != numOfPersons) {
+    printf("Unknown error. Please contact the developer\n");
+    return EXIT_FAILURE;
+  }
 
-	calculateAges(all, numOfPersons, &currentDate);
+  fclose(in);
 
-	printRecords("Records loaded from input file", stdout, all, numOfPersons);
+  calculateAges(all, numOfPersons, &currentDate);
 
-	sortByName(all, numOfPersons);
-	printRecords("Records sorted by name", stdout, all, numOfPersons);
+  printRecords("Records loaded from input file", stdout, all, numOfPersons);
 
-	sortByAge(all, numOfPersons);
-	printRecords("Records sorted by age", stdout, all, numOfPersons);
+  sortByName(all, numOfPersons);
+  printRecords("Records sorted by name", stdout, all, numOfPersons);
 
-	free(all);
-	return EXIT_SUCCESS;
+  sortByAge(all, numOfPersons);
+  printRecords("Records sorted by age", stdout, all, numOfPersons);
+
+  free(all);
+  return EXIT_SUCCESS;
 }
