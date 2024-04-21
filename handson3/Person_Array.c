@@ -62,11 +62,5 @@ void calculateAges(Person *all, int size, const Date *pCurrent) {
   // calculate the ages of all the persons in the array "all"
   // ...
   for (int i = 0; i < size; i++) {
-    int today = (pCurrent->year * 100 + pCurrent->month) * 100 + pCurrent->day;
-    int birthDay =
-        (all[i].birthDate.year * 100 + all[i].birthDate.month) * 100 +
-        all[i].birthDate.day;
-
-    all[i].age = (today - birthDay) / 10000;
   }
 }
