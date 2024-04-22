@@ -6,7 +6,7 @@
 #include "Person.h"
 #include "String_Oper.h"
 
-int countRecords(FILE *in) {
+int countRecords(FILE *in, FILE *fBin) {
   int count = 0;
 
   for (;;) {
@@ -18,8 +18,10 @@ int countRecords(FILE *in) {
       printf("Illegal format for the record No.%d\n", count + 1);
       exit(1);
     }
+    fwrite(&temp, sizeof(Person), 1, fBin);
     ++count;
   }
+  fclose(fBin);
 }
 
 int loadRecordsFromTextFile(FILE *in, Person *all, int size) {
@@ -45,6 +47,14 @@ int loadRecordsFromTextFile(FILE *in, Person *all, int size) {
       printf("Illegal value read from input file.\n");
       exit(1);
     }
+  }
+  return count;
+}
+
+int loadRecordsFromBinary(FILE *fBin, Person *all, int size) {
+  int count = 0;
+  while (fread(&(all[count]), sizeof(Person), 1, fBin) == 1) {
+    count++;
   }
   return count;
 }

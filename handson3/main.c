@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
   loadConfig(argv[1], pConfig);
 
-  FILE *in, *out;
+  FILE *in, *out, *binIn, *binOut;
   Person *all;
   int numOfPersons;
 
@@ -34,7 +34,20 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  numOfPersons = countRecords(in);
+  binOut = fopen("temp.bin", "wb");
+  if (binOut == NULL) {
+    printf("Unable to open binary file\n");
+    return EXIT_FAILURE;
+  }
+
+  numOfPersons = countRecords(in, binOut);
+
+  binIn = fopen("temp.bin", "rb");
+  if (binIn == NULL) {
+    printf("Unable to open binary file\n");
+    return EXIT_FAILURE;
+  }
+
   if (numOfPersons == 0) {
     printf("No data in input file\n");
     return EXIT_FAILURE;
@@ -48,7 +61,9 @@ int main(int argc, char **argv) {
 
   rewind(in);
 
-  int count = loadRecordsFromTextFile(in, all, numOfPersons);
+  // int count = loadRecordsFromTextFile(in, all, numOfPersons);
+  int count = loadRecordsFromBinary(binIn, all, numOfPersons);
+
   if (count != numOfPersons) {
     printf("Unknown error. Please contact the developer\n");
     return EXIT_FAILURE;
