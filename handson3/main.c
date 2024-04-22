@@ -7,7 +7,7 @@
 #include "Sort.h"
 
 int main() {
-  FILE *in;
+  FILE *in, *out;
   Person *all;
   int numOfPersons;
 
@@ -16,6 +16,12 @@ int main() {
   in = fopen("input.txt", "rt");
   if (in == NULL) {
     printf("Unable to open input file\n");
+    return EXIT_FAILURE;
+  }
+
+  out = fopen("output.txt", "wt");
+  if (out == NULL) {
+    printf("Unable to open output file\n");
     return EXIT_FAILURE;
   }
 
@@ -43,13 +49,13 @@ int main() {
 
   calculateAges(all, numOfPersons, &currentDate);
 
-  printRecords("Records loaded from input file", stdout, all, numOfPersons);
+  printRecords("Records loaded from input file", out, all, numOfPersons);
 
   sortByName(all, numOfPersons);
-  printRecords("Records sorted by name", stdout, all, numOfPersons);
+  printRecords("Records sorted by name", out, all, numOfPersons);
 
   sortByAge(all, numOfPersons);
-  printRecords("Records sorted by age", stdout, all, numOfPersons);
+  printRecords("Records sorted by age", out, all, numOfPersons);
 
   free(all);
   return EXIT_SUCCESS;

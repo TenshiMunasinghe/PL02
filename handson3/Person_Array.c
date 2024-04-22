@@ -62,5 +62,6 @@ void calculateAges(Person *all, int size, const Date *pCurrent) {
   // calculate the ages of all the persons in the array "all"
   // ...
   for (int i = 0; i < size; i++) {
+    all[i].age = getAge(&(all[i].birthDate), pCurrent);
   }
 }

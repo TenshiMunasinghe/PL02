@@ -1,0 +1,15 @@
+Records loaded from input file
+Smith s1234567 1982/10/15 37y/o
+Black st2345 1900/12/31 119y/o
+White d2333457 1984/6/13 35y/o
+Ashley 12345 2016/12/31 3y/o
+Records sorted by name
+Ashley 12345 2016/12/31 3y/o
+Black st2345 1900/12/31 119y/o
+Smith s1234567 1982/10/15 37y/o
+White d2333457 1984/6/13 35y/o
+Records sorted by age
+Ashley 12345 2016/12/31 3y/o
+White d2333457 1984/6/13 35y/o
+Smith s1234567 1982/10/15 37y/o
+Black st2345 1900/12/31 119y/o
