@@ -1,25 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "Date.h"
+#include "Config.h"
 #include "Person.h"
 #include "Person_Array.h"
 #include "Sort.h"
 
-int main() {
+int main(int argc, char **argv) {
+  if (!argv[1]) {
+    printf("Enter config file name.\n");
+    return EXIT_FAILURE;
+  }
+
+  Config *pConfig;
+  pConfig = (Config *)malloc(sizeof(Config));
+
+  loadConfig(argv[1], pConfig);
+
   FILE *in, *out;
   Person *all;
   int numOfPersons;
 
-  Date currentDate = {2020, 4, 24};
-
-  in = fopen("input.txt", "rt");
+  in = fopen(pConfig->inputFile, "rt");
   if (in == NULL) {
     printf("Unable to open input file\n");
     return EXIT_FAILURE;
   }
 
-  out = fopen("output.txt", "wt");
+  out = fopen(pConfig->outputFile, "wt");
   if (out == NULL) {
     printf("Unable to open output file\n");
     return EXIT_FAILURE;
@@ -47,15 +56,19 @@ int main() {
 
   fclose(in);
 
-  calculateAges(all, numOfPersons, &currentDate);
+  calculateAges(all, numOfPersons, &(pConfig->currentDate));
 
-  printRecords("Records loaded from input file", out, all, numOfPersons);
+  // printRecords("Records loaded from input file", out, all, numOfPersons);
 
-  sortByName(all, numOfPersons);
-  printRecords("Records sorted by name", out, all, numOfPersons);
+  if (strcmp(pConfig->sortOrder, "name") == 0) {
+    sortByName(all, numOfPersons);
+    printRecords("Records sorted by name", out, all, numOfPersons);
+  }
 
-  sortByAge(all, numOfPersons);
-  printRecords("Records sorted by age", out, all, numOfPersons);
+  if (strcmp(pConfig->sortOrder, "age") == 0) {
+    sortByAge(all, numOfPersons);
+    printRecords("Records sorted by age", out, all, numOfPersons);
+  }
 
   free(all);
   return EXIT_SUCCESS;
