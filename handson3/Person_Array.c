@@ -6,6 +6,8 @@
 #include "Person.h"
 #include "String_Oper.h"
 
+#define BIRTH_YEAR_LIMIT 2016
+
 int countRecords(FILE *in, FILE *fBin)
 {
   int count = 0;
@@ -50,7 +52,7 @@ int loadRecordsFromTextFile(FILE *in, Person *all, int size)
     }
 
     readPerson(in, pPerson);
-    if (!isDateLegal(&(pPerson->birthDate)) || !isValidName(pPerson->name) ||
+    if (!isDateLegal(&(pPerson->birthDate), 2016) || !isValidName(pPerson->name) ||
         !isValidId(pPerson->id))
     {
       printf("Illegal value read from input file.\n");

@@ -14,7 +14,7 @@ typedef struct
 } Date;
 
 int readDate(FILE *in, Date *pDate);
-bool isDateLegal(const Date *pDate);
+bool isDateLegal(const Date *pDate, int yearLimit);
 void printDate(FILE *out, const Date *pDate);
 void printDateLine(FILE *out, const Date *pDate);
 int getAge(const Date *pDate, const Date *pCurrent);

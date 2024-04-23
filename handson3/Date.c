@@ -21,7 +21,7 @@ int readDate(FILE *in, Date *pDate)
   return 1;
 }
 
-bool isDateLegal(const Date *pDate)
+bool isDateLegal(const Date *pDate, int yearLimit)
 {
   int daysLimit[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
@@ -31,7 +31,7 @@ bool isDateLegal(const Date *pDate)
     isLegal = false;
   else if ((pDate->day < 1) || (pDate->day > daysLimit[pDate->month - 1]))
     isLegal = false;
-  else if ((pDate->year < 1900) || (pDate->year > 2016))
+  else if ((pDate->year < 1900) || (pDate->year > yearLimit))
     isLegal = false;
   else if ((pDate->month == 2) && (pDate->day == 29) &&
            (!isLeapYear(pDate->year)))
@@ -100,10 +100,10 @@ int isLeapYear(int year)
 
 int formatDate(char *result, char *format, Date date)
 {
-  if (!isDateLegal(&date))
-  {
-    return 0;
-  }
+  // if (!isDateLegal(&date))
+  // {
+  //   return 0;
+  // }
 
   strcpy(result, format);
 
