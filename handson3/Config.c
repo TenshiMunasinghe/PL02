@@ -30,7 +30,7 @@ void loadConfig(char *configFile, Config *pConfig)
 
   retScan = fscanf(config, "%d/%d/%d", &(pConfig->currentDate.year),
                    &(pConfig->currentDate.month), &(pConfig->currentDate.day));
-  if (retScan != 3 || !isDateLegal(&(pConfig->currentDate)))
+  if (retScan != 3 || isDateLegal(&(pConfig->currentDate)) == false)
   {
     printf("Error in reading current date.\n");
     exit(1);

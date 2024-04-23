@@ -1,9 +1,12 @@
 #include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
 
-bool isValidName(char *name) {
-  while (*name) {
+bool isValidName(char *name)
+{
+  while (*name)
+  {
     if (!isalpha(*name))
       return false;
     name++;
@@ -11,9 +14,12 @@ bool isValidName(char *name) {
   return true;
 }
 
-bool isValidId(char *id) {
-  while (*id) {
-    if (!isalpha(*id) && !isdigit(*id)) {
+bool isValidId(char *id)
+{
+  while (*id)
+  {
+    if (!isalpha(*id) && !isdigit(*id))
+    {
       return false;
     }
     id++;
@@ -22,7 +28,8 @@ bool isValidId(char *id) {
 }
 
 // Names are words containing only letters
-int getName(FILE *in, char *name, int limit) {
+int getName(FILE *in, char *name, int limit)
+{
   char ch = fgetc(in);
   int ixLit = 0;
 
@@ -32,7 +39,8 @@ int getName(FILE *in, char *name, int limit) {
   if (ch == EOF)
     return EOF;
   // Reading a word of letters
-  while (!isspace(ch) && ch != EOF) {
+  while (!isspace(ch) && ch != EOF)
+  {
     if (!isalpha(ch))
       return 0;
 
@@ -47,7 +55,8 @@ int getName(FILE *in, char *name, int limit) {
 }
 
 // IDs are words contaning letters and digits
-int getId(FILE *in, char *id, int limit) {
+int getId(FILE *in, char *id, int limit)
+{
   // Complete this function definition
   // similar to getName()
   // ...
@@ -60,7 +69,8 @@ int getId(FILE *in, char *id, int limit) {
   if (ch == EOF)
     return EOF;
   // Reading a word of letters
-  while (!isspace(ch) && ch != EOF) {
+  while (!isspace(ch) && ch != EOF)
+  {
     if (!isalpha(ch) && !isdigit(ch))
       return 0;
 
@@ -72,4 +82,22 @@ int getId(FILE *in, char *id, int limit) {
   id[ixLit] = '\0';
 
   return 1;
+}
+
+char *replace(char *str, const char *what, const char *with)
+{
+  if (!*what)
+  {
+    return str;
+  }
+  char *what_pos = strstr(str, what);
+  if (!what_pos)
+  {
+    return str;
+  }
+  const size_t what_len = strlen(what), with_len = strlen(with);
+  const char *remain = what_pos + what_len;
+  memmove(what_pos + with_len, remain, strlen(remain) + 1);
+  memcpy(what_pos, with, with_len);
+  return str;
 }
