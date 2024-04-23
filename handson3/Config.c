@@ -34,8 +34,6 @@ void loadConfig(char *configFile, Config *pConfig)
                    &(pConfig->currentDate.month), &(pConfig->currentDate.day));
   if (retScan != 3 || !isDateLegal(&(pConfig->currentDate), YEAR_LIMIT))
   {
-    printf("%d %d %d %d", (pConfig->currentDate.year),
-           (pConfig->currentDate.month), (pConfig->currentDate.day), retScan);
     printf("Error in reading current date.\n");
     exit(1);
   };
