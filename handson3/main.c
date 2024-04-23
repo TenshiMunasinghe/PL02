@@ -89,14 +89,15 @@ int main(int argc, char **argv)
     sortByName(all, numOfPersons);
     printRecords("Records sorted by name", out, all, numOfPersons);
   }
-
-  if (strcmp(pConfig->sortOrder, "age") == 0)
+  else if (strcmp(pConfig->sortOrder, "age") == 0)
   {
     sortByAge(all, numOfPersons);
     printRecords("Records sorted by age", out, all, numOfPersons);
   }
-
-  printRecords("No sorting order specified", out, all, numOfPersons);
+  else
+  {
+    printRecords("No sorting order specified", out, all, numOfPersons);
+  }
 
   free(all);
   return EXIT_SUCCESS;

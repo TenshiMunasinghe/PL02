@@ -5,7 +5,8 @@
 
 int isLeapYear(int year); // See the function definition below...
 
-int readDate(FILE *in, Date *pDate) {
+int readDate(FILE *in, Date *pDate)
+{
   int retScan =
       fscanf(in, "%d %d %d", &(pDate->year), &(pDate->month), &(pDate->day));
   if (retScan == EOF)
@@ -15,7 +16,8 @@ int readDate(FILE *in, Date *pDate) {
   return 1;
 }
 
-bool isDateLegal(const Date *pDate) {
+bool isDateLegal(const Date *pDate, int yearLimit)
+{
   int daysLimit[12] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
   bool isLegal = true;
@@ -24,7 +26,7 @@ bool isDateLegal(const Date *pDate) {
     isLegal = false;
   else if ((pDate->day < 1) || (pDate->day > daysLimit[pDate->month - 1]))
     isLegal = false;
-  else if ((pDate->year < 1900) || (pDate->year > 2016))
+  else if ((pDate->year < 1900) || (pDate->year > yearLimit))
     isLegal = false;
   else if ((pDate->month == 2) && (pDate->day == 29) &&
            (!isLeapYear(pDate->year)))
@@ -32,34 +34,40 @@ bool isDateLegal(const Date *pDate) {
   return isLegal;
 }
 
-void printDate(FILE *out, const Date *pDate) {
+void printDate(FILE *out, const Date *pDate)
+{
   // Complete this function
   // ...
   fprintf(out, "%d/%d/%d", pDate->year, pDate->month, pDate->day);
 }
 
-void printDateLine(FILE *out, const Date *pDate) {
+void printDateLine(FILE *out, const Date *pDate)
+{
   printDate(out, pDate);
   fprintf(out, "\n");
 }
 
-int getAge(const Date *pBirthDate, const Date *pCurrent) {
+int getAge(const Date *pBirthDate, const Date *pCurrent)
+{
   int age;
 
   age = pCurrent->year - pBirthDate->year;
-  if (age <= 0) {
+  if (age <= 0)
+  {
     age = 0;
     return age;
   }
 
   // Write missting code to compute age
   // ...
-  if (pCurrent->month > pBirthDate->month) {
+  if (pCurrent->month > pBirthDate->month)
+  {
     return age;
   }
 
   if (pCurrent->month == pBirthDate->month &&
-      pCurrent->day >= pBirthDate->day) {
+      pCurrent->day >= pBirthDate->day)
+  {
     return age;
   }
 
@@ -69,7 +77,8 @@ int getAge(const Date *pBirthDate, const Date *pCurrent) {
 // Complete definition of this function:
 // Function returns 1, if the year is leap,
 //          returns 0. otherwise
-int isLeapYear(int year) {
+int isLeapYear(int year)
+{
   if (year % 400 == 0)
     return 1;
 

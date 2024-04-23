@@ -1,6 +1,8 @@
 #include "Config.h"
 #include <stdlib.h>
 
+#define YEAR_LIMIT 2024
+
 void loadConfig(char *configFile, Config *pConfig)
 {
   FILE *config;
@@ -30,8 +32,10 @@ void loadConfig(char *configFile, Config *pConfig)
 
   retScan = fscanf(config, "%d/%d/%d", &(pConfig->currentDate.year),
                    &(pConfig->currentDate.month), &(pConfig->currentDate.day));
-  if (retScan != 3 || !isDateLegal(&(pConfig->currentDate)))
+  if (retScan != 3 || !isDateLegal(&(pConfig->currentDate), YEAR_LIMIT))
   {
+    printf("%d %d %d %d", (pConfig->currentDate.year),
+           (pConfig->currentDate.month), (pConfig->currentDate.day), retScan);
     printf("Error in reading current date.\n");
     exit(1);
   };
