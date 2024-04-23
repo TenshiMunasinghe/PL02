@@ -7,8 +7,10 @@
 #include "Person_Array.h"
 #include "Sort.h"
 
-int main(int argc, char **argv) {
-  if (!argv[1]) {
+int main(int argc, char **argv)
+{
+  if (!argv[1])
+  {
     printf("Enter config file name.\n");
     return EXIT_FAILURE;
   }
@@ -23,19 +25,22 @@ int main(int argc, char **argv) {
   int numOfPersons;
 
   in = fopen(pConfig->inputFile, "rt");
-  if (in == NULL) {
+  if (in == NULL)
+  {
     printf("Unable to open input file\n");
     return EXIT_FAILURE;
   }
 
   out = fopen(pConfig->outputFile, "wt");
-  if (out == NULL) {
+  if (out == NULL)
+  {
     printf("Unable to open output file\n");
     return EXIT_FAILURE;
   }
 
   binOut = fopen("temp.bin", "wb");
-  if (binOut == NULL) {
+  if (binOut == NULL)
+  {
     printf("Unable to open binary file\n");
     return EXIT_FAILURE;
   }
@@ -43,18 +48,21 @@ int main(int argc, char **argv) {
   numOfPersons = countRecords(in, binOut);
 
   binIn = fopen("temp.bin", "rb");
-  if (binIn == NULL) {
+  if (binIn == NULL)
+  {
     printf("Unable to open binary file\n");
     return EXIT_FAILURE;
   }
 
-  if (numOfPersons == 0) {
+  if (numOfPersons == 0)
+  {
     printf("No data in input file\n");
     return EXIT_FAILURE;
   }
 
   all = (Person *)malloc(numOfPersons * sizeof(Person));
-  if (all == NULL) {
+  if (all == NULL)
+  {
     printf("Memory allocation error\n");
     return EXIT_FAILURE;
   }
@@ -64,7 +72,8 @@ int main(int argc, char **argv) {
   // int count = loadRecordsFromTextFile(in, all, numOfPersons);
   int count = loadRecordsFromBinary(binIn, all, numOfPersons);
 
-  if (count != numOfPersons) {
+  if (count != numOfPersons)
+  {
     printf("Unknown error. Please contact the developer\n");
     return EXIT_FAILURE;
   }
@@ -75,12 +84,14 @@ int main(int argc, char **argv) {
 
   // printRecords("Records loaded from input file", out, all, numOfPersons);
 
-  if (strcmp(pConfig->sortOrder, "name") == 0) {
+  if (strcmp(pConfig->sortOrder, "name") == 0)
+  {
     sortByName(all, numOfPersons);
     printRecords("Records sorted by name", out, all, numOfPersons);
   }
 
-  if (strcmp(pConfig->sortOrder, "age") == 0) {
+  if (strcmp(pConfig->sortOrder, "age") == 0)
+  {
     sortByAge(all, numOfPersons);
     printRecords("Records sorted by age", out, all, numOfPersons);
   }
