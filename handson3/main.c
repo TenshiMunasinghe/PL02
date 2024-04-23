@@ -96,6 +96,8 @@ int main(int argc, char **argv)
     printRecords("Records sorted by age", out, all, numOfPersons);
   }
 
+  printRecords("No sorting order specified", out, all, numOfPersons);
+
   free(all);
   return EXIT_SUCCESS;
 }
