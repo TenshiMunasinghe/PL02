@@ -27,19 +27,19 @@ int readPerson(FILE *in, Person *pPerson) {
   return 1;
 }
 
-void printPerson(FILE *out, const Person *pPerson) {
+void printPerson(FILE *out, const Person *pPerson, char *dateFormat) {
   // Complete this function definition:
   // (use printDate() to print birthdate.
   // Do not forget to print age as well.
   // ...
   fprintf(out, "%s %s ", pPerson->name, pPerson->id);
-  printDate(out, &(pPerson->birthDate));
+  printDate(out, &(pPerson->birthDate), dateFormat);
   fprintf(out, " %dy/o", pPerson->age);
 }
 
-void printPersonLine(FILE *out, const Person *pPerson) {
+void printPersonLine(FILE *out, const Person *pPerson, char *dateFormat) {
   // Comlete this function using printDateLine() pattern
   // ...
-  printPerson(out, pPerson);
+  printPerson(out, pPerson, dateFormat);
   fprintf(out, "\n");
 }

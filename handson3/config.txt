@@ -1,4 +1,5 @@
 input.txt
 output.txt
 2020/4/20
+yyyy/mmm/d
 name
