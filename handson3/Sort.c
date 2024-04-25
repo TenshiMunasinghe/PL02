@@ -14,6 +14,18 @@ void sortByName(Person *a, int n) {
     }
   }
 }
+void sortIdxByName(int *idxArr, Person *a, int n) {
+  for (int i = 1; i < n; i++) {
+    for (int j = n - 1; j >= i; j--) {
+      if (strcmp(a[idxArr[j]].name, a[idxArr[j - 1]].name) < 0) {
+        // swapPersons(&a[j], &a[j - 1]);
+        int temp = idxArr[j];
+        idxArr[j] = idxArr[j - 1];
+        idxArr[j - 1] = temp;
+      }
+    }
+  }
+}
 
 void sortByAge(Person *a, int n) {
   // Complete function definition
@@ -23,6 +35,19 @@ void sortByAge(Person *a, int n) {
     for (int j = n - 1; j >= i; j--) {
       if (a[j].age < a[j - 1].age) { // sort in ascending order
         swapPersons(&a[j], &a[j - 1]);
+      }
+    }
+  }
+}
+
+void sortIdxByAge(int *idxArr, Person *a, int n) {
+  for (int i = 1; i < n; i++) {
+    for (int j = n - 1; j >= i; j--) {
+      if (a[idxArr[j]].age < a[idxArr[j - 1]].age) { // sort in ascending order
+        // swapPersons(&a[j], &a[j - 1]);
+        int temp = idxArr[j];
+        idxArr[j] = idxArr[j - 1];
+        idxArr[j - 1] = temp;
       }
     }
   }

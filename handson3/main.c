@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
   FILE *in, *out, *binIn, *binOut;
   Person *all;
   int numOfPersons;
+  int *idxArr;
 
   in = fopen(pConfig->inputFile, "rt");
   if (in == NULL) {
@@ -41,6 +42,7 @@ int main(int argc, char **argv) {
   }
 
   numOfPersons = countRecords(in, binOut);
+  createIdxArr(&idxArr, numOfPersons);
 
   binIn = fopen("temp.bin", "rb");
   if (binIn == NULL) {
@@ -76,18 +78,28 @@ int main(int argc, char **argv) {
   // printRecords("Records loaded from input file", out, all, numOfPersons);
 
   if (strcmp(pConfig->sortOrder, "name") == 0) {
-    sortByName(all, numOfPersons);
-    printRecords("Records sorted by name", out, all, numOfPersons,
-                 pConfig->dateFormat);
+    // sortByName(all, numOfPersons);
+    // printRecords("Records sorted by name", out, all, numOfPersons,
+    //              pConfig->dateFormat);
+    sortIdxByName(idxArr, all, numOfPersons);
+    printRecordsByIdx("Records sorted by name", out, all, idxArr, numOfPersons,
+                      pConfig->dateFormat);
   } else if (strcmp(pConfig->sortOrder, "age") == 0) {
-    sortByAge(all, numOfPersons);
-    printRecords("Records sorted by age", out, all, numOfPersons,
-                 pConfig->dateFormat);
+    // sortByAge(all, numOfPersons);
+    // printRecords("Records sorted by age", out, all, numOfPersons,
+    //              pConfig->dateFormat);
+    sortIdxByAge(idxArr, all, numOfPersons);
+    printRecordsByIdx("Records sorted by age", out, all, idxArr, numOfPersons,
+                      pConfig->dateFormat);
   } else {
-    printRecords("No sorting order specified", out, all, numOfPersons,
-                 pConfig->dateFormat);
+    // printRecords("No sorting order specified", out, all, numOfPersons,
+    //              pConfig->dateFormat);
+    printRecordsByIdx("No sorting order specified", out, all, idxArr,
+                      numOfPersons, pConfig->dateFormat);
   }
 
   free(all);
+  free(pConfig);
+  free(idxArr);
   return EXIT_SUCCESS;
 }

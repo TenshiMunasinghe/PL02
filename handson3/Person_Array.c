@@ -25,6 +25,13 @@ int countRecords(FILE *in, FILE *fBin) {
   }
 }
 
+void createIdxArr(int **pArr, int length) {
+  *pArr = (int *)(malloc(sizeof(int) * length));
+  for (int i = 0; i < length; i++) {
+    (*pArr)[i] = i;
+  }
+}
+
 int loadRecordsFromTextFile(FILE *in, Person *all, int size) {
   int count;
 
@@ -62,6 +69,15 @@ void printRecords(const char *title, FILE *out, const Person *all, int size,
 
   for (int ix = 0; ix < size; ++ix) {
     printPersonLine(out, &(all[ix]), dateFormat);
+  }
+}
+
+void printRecordsByIdx(const char *title, FILE *out, const Person *all,
+                       int *pIdxArr, int size, char *dateFormat) {
+  fprintf(out, "%s\n", title);
+
+  for (int i = 0; i < size; i++) {
+    printPersonLine(out, &(all[pIdxArr[i]]), dateFormat);
   }
 }
 
