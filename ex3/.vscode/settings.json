@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.css": "css",
+    "css": "css",
+    "cstring": "c",
+    "typeinfo": "c",
+    "__locale": "c",
+    "vector": "c"
+  }
+}

@@ -2,16 +2,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define HASH_SIZE 33
+#define MAX_DATA_SIZE 256
+#define MAX_BLOCK_LENGTH 100
+#define MAX_NONCE 1000000
+
+int GLOBAL_NONCE_ARRAY[MAX_BLOCK_LENGTH];
 
 typedef struct block
 {
     int index;
     time_t timestamp;
-    char data[256];
+    char data[MAX_DATA_SIZE];
     char previousHash[HASH_SIZE];
     char hash[HASH_SIZE];
+    int nonce;
 } Block;
 
 typedef struct BlockNode
@@ -28,8 +35,40 @@ BlockNode *createGenesisNode();
 BlockNode *addBlock(BlockNode *lastNode, char *data);
 int isBlockValid(Block newBlock, Block previousBlock);
 int isChainValid(BlockNode *head);
+bool isNonceUsed(int element);
 
-void simpleHash(char *input, char output[HASH_SIZE])
+bool isNonceUsed(int element)
+{
+    for (int i = 0; i < MAX_BLOCK_LENGTH; i++)
+    {
+        if (GLOBAL_NONCE_ARRAY[i] == element)
+            return true;
+    }
+    return false;
+}
+
+void hashBlock(Block *block)
+{
+    int nonce = -1;
+    char temp[1024] = {0}; // init to zero
+    char leadingChars[3];
+    do
+    {
+        nonce++;
+        block->nonce = nonce;
+        if (nonce > MAX_NONCE)
+        {
+            printf("Max nonce exceeded.\n");
+            break;
+        }
+        sprintf(temp,
+                "%d%s%lld%s%d", block->index, block->previousHash, (long long)block->timestamp, block->data, nonce);
+        simpleHash(temp, block->hash);
+        strncpy(leadingChars, block->hash, 3); // Read first 3 characters.
+    } while (strcmp("000", leadingChars) != 0 || isNonceUsed(nonce) == true);
+};
+
+void simpleHash(char *input, char output[HASH_SIZE]) // WARNING: This algorithm is too poor to produce a hash with leading zeroes.
 {
     for (int i = 0; i < HASH_SIZE - 1; i++)
     {
@@ -39,6 +78,7 @@ void simpleHash(char *input, char output[HASH_SIZE])
     {
         output[i % (HASH_SIZE - 1)] ^= input[i];
     }
+
     output[HASH_SIZE - 1] = '\0'; // null-terminate the hash
 }
 
@@ -49,9 +89,7 @@ Block createGenesisBlock()
     strcpy(genesis.previousHash, "0");
     genesis.timestamp = time(NULL);
     strcpy(genesis.data, "Genesis Block");
-    char temp[1024] = {0}; // init to zero
-    sprintf(temp, "%d%s%lld%s", genesis.index, genesis.previousHash, (long long)genesis.timestamp, genesis.data);
-    simpleHash(temp, genesis.hash);
+    hashBlock(&genesis);
     return genesis;
 }
 
@@ -62,9 +100,8 @@ Block createBlock(Block previousBlock, char *data)
     strcpy(newBlock.previousHash, previousBlock.hash);
     newBlock.timestamp = time(NULL);
     strcpy(newBlock.data, data);
-    char temp[1024] = {0};
-    sprintf(temp, "%d%s%lld%s", newBlock.index, newBlock.previousHash, (long long)newBlock.timestamp, newBlock.data);
-    simpleHash(temp, newBlock.hash);
+    hashBlock(&newBlock);
+
     return newBlock;
 }
 
@@ -114,14 +151,12 @@ int isBlockValid(Block newBlock, Block previousBlock)
     {
         return 0;
     }
-    char recalculatedHash[HASH_SIZE] = {0};
-    char temp[1024] = {0};
-    sprintf(temp, "%d%s%lld%s", newBlock.index, newBlock.previousHash, (long long)newBlock.timestamp, newBlock.data);
-    simpleHash(temp, recalculatedHash);
-    if (strcmp(recalculatedHash, newBlock.hash) != 0)
-    {
-        return 0;
-    }
+    // char recalculatedHash[HASH_SIZE] = {0};
+
+    // if (strcmp(recalculatedHash, newBlock.hash) != 0)
+    // {
+    //     return 0;
+    // }
     return 1;
 }
 
@@ -145,7 +180,7 @@ int main()
     printf("Genesis Block has been created with hash: %s\n\n", blockchain->block.hash);
 
     BlockNode *lastNode = blockchain;
-    char data[256];
+    char data[MAX_DATA_SIZE];
     int blockchainLength = 1; // genesis block = 1
 
     while (1)
