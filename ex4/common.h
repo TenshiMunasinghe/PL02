@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   common.h
  * Author: pyshe
  *
@@ -13,7 +13,7 @@ typedef struct
 {
     char name[MAX_LENGTH];
     FILE *source;
-    
+
 } Document;
 
 int getWord(FILE *f, char *word, int limit);

@@ -15,7 +15,7 @@
 #include "config.h"
 
 int openAllDocs(Document *docs, int numDocs);
-int setAllDocsNames(Document *docs, int numDocs, char **argv);
+int setAllDocsNames(Document *docs, int numDocs, char **docNames);
 void printAllDocsNames(Document *docs, int numDocs);
 void closeAllDocs(Document *docs, int numDocs);
 int readAllTerms(FILE *input, char **terms, int numTerms);
@@ -26,11 +26,8 @@ void printAllTerms(char **terms, int numTerms);
  */
 int main()
 {
-    int numTerms;
     FILE *input;
     char **terms;
-
-    int numDocs;
     Document *docs;
 
     IntMatrix termFreqMatrix;       // to store "f" values (term frequencies)
@@ -39,55 +36,54 @@ int main()
 
     Config config;
 
-    docs = (Document *)malloc(numDocs * sizeof(Document));
+    docs = (Document *)malloc(config.numDocs * sizeof(Document));
     if (docs == NULL)
     {
         printf("Memory allocation error\n");
         exit(20);
     }
 
-    if (setAllDocsNames(docs, numDocs, argv) != numDocs)
+    if (setAllDocsNames(docs, config.numDocs, config.fileNames) != config.numDocs)
     {
         printf("Some document names are missing\n");
         exit(40);
     }
 
-    if (openAllDocs(docs, numDocs) != numDocs)
+    if (openAllDocs(docs, config.numDocs) != config.numDocs)
     {
         printf("Some documents are missing\n");
         exit(40);
     }
 
     printf("Loaded documents:\n");
-    printAllDocsNames(docs, numDocs);
+    printAllDocsNames(docs, config.numDocs);
 
-    input = fopen("input.txt", "rt");
+    input = fopen("terms.txt", "rt");
     if (input == NULL)
     {
         printf("No input file found\n");
         exit(50);
     }
-
-    if (fscanf(input, "%d", &numTerms) != 1)
+    if (fscanf(input, "%d", &config.numTerms) != 1)
     {
         printf("wrong input file format\n");
         exit(60);
     }
 
-    if (numTerms <= 0)
+    if (config.numTerms <= 0)
     {
         printf("illegal number of terms\n");
         exit(60);
     }
 
-    terms = (char **)malloc(numTerms * sizeof(char *));
+    terms = (char **)malloc(config.numTerms * sizeof(char *));
     if (terms == NULL)
     {
         printf("Memory allocation error\n");
         exit(20);
     }
 
-    for (int ixTerm = 0; ixTerm < numTerms; ixTerm++)
+    for (int ixTerm = 0; ixTerm < config.numTerms; ixTerm++)
     {
         terms[ixTerm] = (char *)malloc(MAX_LENGTH + 1);
         if (terms[ixTerm] == NULL)
@@ -97,7 +93,7 @@ int main()
         }
     }
 
-    if (readAllTerms(input, terms, numTerms) != numTerms)
+    if (readAllTerms(input, terms, config.numTerms) != config.numTerms)
     {
         printf("Some terms are missing in the input file\n");
         exit(70);
@@ -105,7 +101,7 @@ int main()
 
     printf("\n");
     printf("Loaded terms:\n");
-    printAllTerms(terms, numTerms);
+    printAllTerms(terms, config.numTerms);
 
     fclose(input);
 
@@ -113,7 +109,7 @@ int main()
     // All the documents are open;
     // All the terms are in "terms"
 
-    if (allocIntMatrix(&termFreqMatrix, numTerms, numDocs) == NULL)
+    if (allocIntMatrix(&termFreqMatrix, config.numTerms, config.numDocs) == NULL)
     {
         printf("Memory allocation error\n");
         exit(20);
@@ -125,7 +121,7 @@ int main()
     printf("Term frequencies:\n");
     printIntMatrix(&termFreqMatrix);
 
-    if (allocFloatMatrix(&normTermFreqMatrix, numTerms, numDocs) == NULL)
+    if (allocFloatMatrix(&normTermFreqMatrix, config.numTerms, config.numDocs) == NULL)
     {
         printf("Memory allocation error\n");
         exit(20);
@@ -137,7 +133,7 @@ int main()
     printf("Normalized term frequencies:\n");
     printFloatMatrix(&normTermFreqMatrix);
 
-    if (allocIntVector(&docFrex, numTerms) == NULL)
+    if (allocIntVector(&docFrex, config.numTerms) == NULL)
     {
         printf("Memory allocation error\n");
         exit(20);
@@ -153,7 +149,7 @@ int main()
     freeFloatMatrix(&normTermFreqMatrix);
     freeIntVector(&docFrex);
 
-    closeAllDocs(docs, numDocs);
+    closeAllDocs(docs, config.numDocs);
     return (EXIT_SUCCESS);
 }
 
@@ -182,13 +178,13 @@ void printAllTerms(char **terms, int numTerms)
     }
 }
 
-int setAllDocsNames(Document *docs, int numDocs, char **argv)
+int setAllDocsNames(Document *docs, int numDocs, char **docNames)
 {
     int docCount = 0;
 
     for (int ixDoc = 0; ixDoc < numDocs; ixDoc++)
     {
-        strcpy(docs[ixDoc].name, argv[ixDoc + 1]);
+        strcpy(docs[ixDoc].name, docNames[ixDoc]);
         docCount++;
     }
     return docCount;
