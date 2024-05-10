@@ -1,9 +1,1 @@
-7
-10
-cats.txt
-catsvsdogs.txt
-dogs.txt
-maps.txt
-national_park.txt
-pet.txt
-transport.txt
+cat dog map animal health transport cafe food mammal nature

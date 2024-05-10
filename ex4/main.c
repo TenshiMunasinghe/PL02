@@ -5,7 +5,6 @@
  * Created on May 17, 2019, 9:16 AM
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -14,7 +13,7 @@
 #include "iralg.h"
 #include "config.h"
 
-int openAllDocs(Document *docs, int numDocs);
+int openAllDocs(Document *docs, int numDocs, char *docsLocation);
 int setAllDocsNames(Document *docs, int numDocs, char **docNames);
 void printAllDocsNames(Document *docs, int numDocs);
 void closeAllDocs(Document *docs, int numDocs);
@@ -24,7 +23,7 @@ void printAllTerms(char **terms, int numTerms);
 /*
  *
  */
-int main()
+int main(int argc, char **argv) // expect path to text documents
 {
     FILE *input;
     char **terms;
@@ -35,6 +34,7 @@ int main()
     IntVector docFrex;              // to store "df" (document frequencies)
 
     Config config;
+    loadConfig("config.txt", &config);
 
     docs = (Document *)malloc(config.numDocs * sizeof(Document));
     if (docs == NULL)
@@ -49,7 +49,7 @@ int main()
         exit(40);
     }
 
-    if (openAllDocs(docs, config.numDocs) != config.numDocs)
+    if (openAllDocs(docs, config.numDocs, argv[1]) != config.numDocs)
     {
         printf("Some documents are missing\n");
         exit(40);
@@ -64,11 +64,11 @@ int main()
         printf("No input file found\n");
         exit(50);
     }
-    if (fscanf(input, "%d", &config.numTerms) != 1)
-    {
-        printf("wrong input file format\n");
-        exit(60);
-    }
+    // if (fscanf(input, "%d", &config.numTerms) != 1)
+    // {
+    //     printf("wrong input file format\n");
+    //     exit(60);
+    // }
 
     if (config.numTerms <= 0)
     {
@@ -181,7 +181,6 @@ void printAllTerms(char **terms, int numTerms)
 int setAllDocsNames(Document *docs, int numDocs, char **docNames)
 {
     int docCount = 0;
-
     for (int ixDoc = 0; ixDoc < numDocs; ixDoc++)
     {
         strcpy(docs[ixDoc].name, docNames[ixDoc]);
@@ -190,16 +189,19 @@ int setAllDocsNames(Document *docs, int numDocs, char **docNames)
     return docCount;
 }
 
-int openAllDocs(Document *docs, int numDocs)
+int openAllDocs(Document *docs, int numDocs, char *docsLocation)
 {
     int docCount = 0;
 
     for (int ixDoc = 0; ixDoc < numDocs; ixDoc++)
     {
-        docs[ixDoc].source = fopen(docs[ixDoc].name, "rt");
+        char path[512];
+        sprintf(path, "%s/%s", docsLocation, docs[ixDoc].name);
+
+        docs[ixDoc].source = fopen(path, "rt");
         if (docs[ixDoc].source == NULL)
         {
-            printf("unable to open the document %s\n", docs[ixDoc].name);
+            printf("unable to open the document %s\n", path);
             exit(30);
         }
         docCount++;

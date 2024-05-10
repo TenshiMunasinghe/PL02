@@ -68,7 +68,7 @@ void loadConfig(char *configFile, Config *pConfig)
     }
 
     char fileName[MAX_LENGTH];
-    fscanf("%s", fileName);
+    fscanf(config, "%s", fileName);
     strcpy(pConfig->fileNames[i], fileName);
   }
 };

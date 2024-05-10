@@ -1,4 +1,4 @@
-
+#include <stdio.h>
 #define MAX_FILE_COUNT 10
 #define MAX_TERM_COUNT 20
 
