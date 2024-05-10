@@ -1,2 +1,2 @@
-5 
-cat dog map animal transport 
+5
+cat dog map animal transport
