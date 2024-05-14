@@ -31,7 +31,9 @@ int main(int argc, char **argv) // expect path to text documents
 
     IntMatrix termFreqMatrix;       // to store "f" values (term frequencies)
     FloatMatrix normTermFreqMatrix; // to store "tf" values (normalized term frequencies)
-    IntVector docFrex;              // to store "df" (document frequencies)
+    IntVector docFreq;              // to store "df" (document frequencies)
+    FloatVector invDocFreq;         // to store "idf" (inverse document frequencies)
+    FloatMatrix termDocIncMatrix;   // to store "w" (term weights)
 
     Config config;
     loadConfig("config.txt", &config);
@@ -115,7 +117,7 @@ int main(int argc, char **argv) // expect path to text documents
         exit(20);
     }
 
-    fillTermFrexMatrix(&termFreqMatrix, terms, docs);
+    fillTermFreqMatrix(&termFreqMatrix, terms, docs);
 
     printf("\n");
     printf("Term frequencies:\n");
@@ -133,21 +135,47 @@ int main(int argc, char **argv) // expect path to text documents
     printf("Normalized term frequencies:\n");
     printFloatMatrix(&normTermFreqMatrix);
 
-    if (allocIntVector(&docFrex, config.numTerms) == NULL)
+    if (allocIntVector(&docFreq, config.numTerms) == NULL)
     {
         printf("Memory allocation error\n");
         exit(20);
     }
 
-    fillDocFrex(&docFrex, &termFreqMatrix);
+    fillDocFreq(&docFreq, &termFreqMatrix);
 
     printf("\n");
     printf("Document frequencies:\n");
-    printIntVector(&docFrex);
+    printIntVector(&docFreq);
+
+    if (allocFloatVector(&invDocFreq, config.numTerms) == NULL)
+    {
+        printf("Memory allocation error\n");
+        exit(20);
+    }
+
+    fillInvDocFreq(&invDocFreq, &docFreq, config.numDocs);
+
+    printf("\n");
+    printf("Inverse document frequencies:\n");
+    printFloatVector(&invDocFreq);
+
+    if (allocFloatMatrix(&termDocIncMatrix, config.numTerms, config.numDocs) == NULL)
+    {
+        printf("Memory allocation error\n");
+        exit(20);
+    }
+
+    fillTermDocIncMatrix(&termDocIncMatrix, &normTermFreqMatrix, &invDocFreq);
+
+    printf("\n");
+    printf("Term Document Incidence:\n");
+    printFloatMatrix(&termDocIncMatrix);
 
     freeIntMatrix(&termFreqMatrix);
     freeFloatMatrix(&normTermFreqMatrix);
-    freeIntVector(&docFrex);
+    freeIntVector(&docFreq);
+    freeFloatVector(&invDocFreq);
+    freeFloatMatrix(&termDocIncMatrix);
 
     closeAllDocs(docs, config.numDocs);
     return (EXIT_SUCCESS);

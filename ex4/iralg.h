@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   iralg.h
  * Author: pyshe
  *
@@ -7,6 +7,8 @@
 
 #pragma once
 
-void fillTermFrexMatrix(IntMatrix *pTfMatrix, char** terms, Document* docs );
+void fillTermFreqMatrix(IntMatrix *pTfMatrix, char **terms, Document *docs);
 void fillNormTermFreqMatrix(FloatMatrix *pNormMatrix, IntMatrix *pTfMatrix);
-void fillDocFrex(IntVector *pDocFrex, IntMatrix *pTfMatrix);
+void fillDocFreq(IntVector *pDocFreq, IntMatrix *pTfMatrix);
+void fillInvDocFreq(FloatVector *pInvDocFreq, IntVector *pDocFreq, int numDocs);
+void fillTermDocIncMatrix(FloatMatrix *pIncMatrix, FloatMatrix *pNormMatrix, FloatVector *pInvDocFreq);
