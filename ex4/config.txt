@@ -1,4 +1,4 @@
-7
+4
 10
 maps.txt
 national_park.txt
