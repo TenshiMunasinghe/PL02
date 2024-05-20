@@ -56,11 +56,16 @@ int frequency(string note)
         frequency *= pow(2, (double)1 / 12);
         strPos++;
     }
+    else if (note[strPos] == 'b')
+    {
+        frequency *= pow(2, (double)(-1) / 12);
+        strPos++;
+    }
 
     char octave[2] = {note[strPos], '\0'}; // convert char to string
     frequency *= pow(2, atof(octave));     // here, note[strPos] is the number before '@'
 
-    return (int)frequency;
+    return (int)frequency; // The program did not work on university computer octaves 3 and below although the calculated frequencies are correct.
 }
 
 // Determines whether a string represents a rest
