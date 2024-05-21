@@ -1,13 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include "sha256.h"
 
-#define HASH_SIZE 33
+#define HASH_SIZE 64
 #define MAX_DATA_SIZE 256
 #define MAX_BLOCK_LENGTH 100
-#define MAX_NONCE 1000000
+#define MAX_NONCE 10000000
 
 int GLOBAL_NONCE_ARRAY[MAX_BLOCK_LENGTH];
 
@@ -51,7 +49,7 @@ void hashBlock(Block *block)
 {
     int nonce = -1;
     char temp[1024] = {0}; // init to zero
-    char leadingChars[3];
+    char leadingChars[2];
     do
     {
         nonce++;
@@ -62,24 +60,28 @@ void hashBlock(Block *block)
             break;
         }
         sprintf(temp,
-                "%d%s%lld%s%d", block->index, block->previousHash, (long long)block->timestamp, block->data, nonce);
+                "%d%d%s%lld%s", nonce, block->index, block->previousHash, (long long)block->timestamp, block->data);
         simpleHash(temp, block->hash);
-        strncpy(leadingChars, block->hash, 3); // Read first 3 characters.
-    } while (strcmp("000", leadingChars) != 0 || isNonceUsed(nonce) == true);
+        strncpy(leadingChars, block->hash, 2); // Read first 3 characters.
+    } while (strcmp("00", leadingChars) != 0 || isNonceUsed(nonce) == true);
 };
 
-void simpleHash(char *input, char output[HASH_SIZE]) // WARNING: This algorithm is too poor to produce a hash with leading zeroes.
+void simpleHash(char *input, char output[HASH_SIZE])
 {
-    for (int i = 0; i < HASH_SIZE - 1; i++)
-    {
-        output[i] = 0;
-    }
-    for (int i = 0; input[i] != '\0'; i++)
-    {
-        output[i % (HASH_SIZE - 1)] ^= input[i];
-    }
+    // for (int i = 0; i < HASH_SIZE - 1; i++)
+    // {
+    //     output[i] = 0;
+    // }
+    // for (int i = 0; input[i] != '\0'; i++)
+    // {
+    //     output[i % (HASH_SIZE - 1)] ^= input[i];
+    // }
 
-    output[HASH_SIZE - 1] = '\0'; // null-terminate the hash
+    // output[HASH_SIZE - 1] = '\0'; // null-terminate the hash
+
+    char *sha256 = SHA256(input);
+    printf("%s   %s\n", input, sha256);
+    strcpy(output, sha256);
 }
 
 Block createGenesisBlock()
@@ -101,7 +103,6 @@ Block createBlock(Block previousBlock, char *data)
     newBlock.timestamp = time(NULL);
     strcpy(newBlock.data, data);
     hashBlock(&newBlock);
-
     return newBlock;
 }
 
@@ -151,12 +152,12 @@ int isBlockValid(Block newBlock, Block previousBlock)
     {
         return 0;
     }
-    // char recalculatedHash[HASH_SIZE] = {0};
+    char recalculatedHash[HASH_SIZE] = {0};
 
-    // if (strcmp(recalculatedHash, newBlock.hash) != 0)
-    // {
-    //     return 0;
-    // }
+    if (strcmp(recalculatedHash, newBlock.hash) != 0)
+    {
+        return 0;
+    }
     return 1;
 }
 
