@@ -49,7 +49,7 @@ void hashBlock(Block *block)
 {
     int nonce = -1;
     char temp[1024] = {0}; // init to zero
-    char leadingChars[2];
+    char leadingChars[2];//chang it back to 3
     do
     {
         nonce++;
