@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <stdio.h>
+#include <stdlib.h>
+
 typedef struct
 {
     int **body; // Jagged matrix of integers
@@ -17,7 +20,7 @@ typedef struct
 IntMatrix *allocIntMatrix(IntMatrix *pMatrix, int numRow, int numCol);
 void freeIntMatrix(IntMatrix *pMatrix);
 
-void printIntMatrix(IntMatrix *pMatrix);
+void printIntMatrix(IntMatrix *pMatrix, FILE *output);
 
 typedef struct
 {
@@ -29,7 +32,7 @@ typedef struct
 FloatMatrix *allocFloatMatrix(FloatMatrix *pMatrix, int numRow, int numCol);
 void freeFloatMatrix(FloatMatrix *pMatrix);
 
-void printFloatMatrix(FloatMatrix *pMatrix);
+void printFloatMatrix(FloatMatrix *pMatrix, FILE *output);
 
 int findMax(IntMatrix *pMatrix);
 
@@ -41,7 +44,7 @@ typedef struct
 
 IntVector *allocIntVector(IntVector *pVector, int size);
 void freeIntVector(IntVector *pVector);
-void printIntVector(IntVector *pVector);
+void printIntVector(IntVector *pVector, FILE *output);
 
 typedef struct
 {
@@ -51,4 +54,4 @@ typedef struct
 
 FloatVector *allocFloatVector(FloatVector *pVector, int size);
 void freeFloatVector(FloatVector *pVector);
-void printFloatVector(FloatVector *pVector);
+void printFloatVector(FloatVector *pVector, FILE *output);
