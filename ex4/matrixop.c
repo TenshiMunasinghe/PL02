@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 
 #include "matrixop.h"
 
@@ -29,15 +27,17 @@ void freeIntMatrix(IntMatrix *pMatrix)
     free(pMatrix->body);
 }
 
-void printIntMatrix(IntMatrix *pMatrix)
+void printIntMatrix(IntMatrix *pMatrix, FILE *output)
 {
     for (int ixRow = 0; ixRow < pMatrix->numRow; ixRow++)
     {
         for (int ixCol = 0; ixCol < pMatrix->numCol; ixCol++)
         {
             printf("%4d ", pMatrix->body[ixRow][ixCol]);
+            fprintf(output, "%4d ", pMatrix->body[ixRow][ixCol]);
         }
         printf("\n");
+        fprintf(output, "\n");
     }
 }
 
@@ -67,15 +67,17 @@ void freeFloatMatrix(FloatMatrix *pMatrix)
     free(pMatrix->body);
 }
 
-void printFloatMatrix(FloatMatrix *pMatrix)
+void printFloatMatrix(FloatMatrix *pMatrix, FILE *output)
 {
     for (int ixRow = 0; ixRow < pMatrix->numRow; ixRow++)
     {
         for (int ixCol = 0; ixCol < pMatrix->numCol; ixCol++)
         {
             printf("%10.3e ", pMatrix->body[ixRow][ixCol]);
+            fprintf(output, "%10.3e ", pMatrix->body[ixRow][ixCol]);
         }
         printf("\n");
+        fprintf(output, "\n");
     }
 }
 
@@ -108,13 +110,15 @@ void freeIntVector(IntVector *pVector)
     free(pVector->body);
 }
 
-void printIntVector(IntVector *pVector)
+void printIntVector(IntVector *pVector, FILE *output)
 {
     for (int ixVec = 0; ixVec < pVector->size; ++ixVec)
     {
         printf("%4d ", pVector->body[ixVec]);
+        fprintf(output, "%4d ", pVector->body[ixVec]);
     }
     printf("\n");
+    fprintf(output, "\n");
 }
 
 FloatVector *allocFloatVector(FloatVector *pVector, int size)
@@ -131,11 +135,13 @@ void freeFloatVector(FloatVector *pVector)
     free(pVector->body);
 }
 
-void printFloatVector(FloatVector *pVector)
+void printFloatVector(FloatVector *pVector, FILE *output)
 {
     for (int ixVec = 0; ixVec < pVector->size; ++ixVec)
     {
         printf("%.3f ", pVector->body[ixVec]);
+        fprintf(output, "%.3f ", pVector->body[ixVec]);
     }
     printf("\n");
+    fprintf(output, "\n");
 }

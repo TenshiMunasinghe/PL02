@@ -26,6 +26,7 @@ void printAllTerms(char **terms, int numTerms);
 int main(int argc, char **argv) // expect path to text documents
 {
     FILE *input;
+    FILE *output;
     char **terms;
     Document *docs;
 
@@ -64,6 +65,13 @@ int main(int argc, char **argv) // expect path to text documents
     if (input == NULL)
     {
         printf("No input file found\n");
+        exit(50);
+    }
+
+    output = fopen("tfidf.txt", "wt");
+    if (output == NULL)
+    {
+        printf("No output file found\n");
         exit(50);
     }
     // if (fscanf(input, "%d", &config.numTerms) != 1)
@@ -121,7 +129,8 @@ int main(int argc, char **argv) // expect path to text documents
 
     printf("\n");
     printf("Term frequencies:\n");
-    printIntMatrix(&termFreqMatrix);
+    fprintf(output, "Term frequencies:\n");
+    printIntMatrix(&termFreqMatrix, output);
 
     if (allocFloatMatrix(&normTermFreqMatrix, config.numTerms, config.numDocs) == NULL)
     {
@@ -132,8 +141,10 @@ int main(int argc, char **argv) // expect path to text documents
     fillNormTermFreqMatrix(&normTermFreqMatrix, &termFreqMatrix);
 
     printf("\n");
+    fprintf(output, "\n");
     printf("Normalized term frequencies:\n");
-    printFloatMatrix(&normTermFreqMatrix);
+    fprintf(output, "Normalized term frequencies:\n");
+    printFloatMatrix(&normTermFreqMatrix, output);
 
     if (allocIntVector(&docFreq, config.numTerms) == NULL)
     {
@@ -145,7 +156,9 @@ int main(int argc, char **argv) // expect path to text documents
 
     printf("\n");
     printf("Document frequencies:\n");
-    printIntVector(&docFreq);
+    fprintf(output, "\n");
+    fprintf(output, "Document frequencies:\n");
+    printIntVector(&docFreq, output);
 
     if (allocFloatVector(&invDocFreq, config.numTerms) == NULL)
     {
@@ -157,7 +170,9 @@ int main(int argc, char **argv) // expect path to text documents
 
     printf("\n");
     printf("Inverse document frequencies:\n");
-    printFloatVector(&invDocFreq);
+    fprintf(output, "\n");
+    fprintf(output, "Inverse document frequencies:\n");
+    printFloatVector(&invDocFreq, output);
 
     if (allocFloatMatrix(&termDocIncMatrix, config.numTerms, config.numDocs) == NULL)
     {
@@ -169,7 +184,9 @@ int main(int argc, char **argv) // expect path to text documents
 
     printf("\n");
     printf("Term Document Incidence:\n");
-    printFloatMatrix(&termDocIncMatrix);
+    fprintf(output, "\n");
+    fprintf(output, "Term Document Incidence:\n");
+    printFloatMatrix(&termDocIncMatrix, output);
 
     freeIntMatrix(&termFreqMatrix);
     freeFloatMatrix(&normTermFreqMatrix);
@@ -178,6 +195,7 @@ int main(int argc, char **argv) // expect path to text documents
     freeFloatMatrix(&termDocIncMatrix);
 
     closeAllDocs(docs, config.numDocs);
+    fclose(output);
     return (EXIT_SUCCESS);
 }
 
