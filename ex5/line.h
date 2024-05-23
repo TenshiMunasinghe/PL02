@@ -1,10 +1,18 @@
 #pragma once
 
 #include "point.h"
+#include <math.h>
+#include <stdlib.h>
 
 typedef struct
 {
-  double gradient;
-  double intercept;
+  double a;
+  double b;
+  double c;
+} Line; // In form of ax+by=c
 
-} Line;
+typedef struct
+{
+  int size;
+  Line *all
+} Lines;
