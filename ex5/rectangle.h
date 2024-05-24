@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "point.h"
 
 #define RECT_POINT_NUM 4

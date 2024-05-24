@@ -3,6 +3,7 @@
 #include "point.h"
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct
 {
@@ -14,5 +15,5 @@ typedef struct
 typedef struct
 {
   int size;
-  Line *all
+  Line *all;
 } Lines;
