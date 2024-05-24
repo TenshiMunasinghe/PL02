@@ -7,6 +7,8 @@ int isValidTypeChar(char ch);
 int isValidNameChar(char ch);
 int isValidNumChar(char ch);
 
+// Just use sscans I guess?
+
 int parseInput(FILE *in, Lines lines, Rectangles rects)
 {
   int error = 1; // 1 means no error
