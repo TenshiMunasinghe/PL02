@@ -1,10 +1,8 @@
 #include "line.h"
 #include "rectangle.h"
 
-int parseInput(FILE *in, Lines lines, Rectangles rects)
-{
-  int id;
-  char type[10], name[12];
-  Point p1, p2;
-  // while(fscanf("%d %s %s (%lf, ) ()") == 4)
-}
+#define MAX_ID_DIGIT 3 // maximum ID is 100
+#define MAX_TYPE 10
+#define MAX_NAME 12
+
+int parseInput(FILE *in, Lines lines, Rectangles rects);

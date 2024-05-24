@@ -2,12 +2,17 @@
 
 void isRectanglevalid(Rectangle rect)
 {
-  for (int i = 0; i < 3; i++)
+  for (int i = 0; i < RECT_POINT_NUM - 1; i++)
   {
-    if (isPointEqual(rect[i], rect[i + 1]) == 1)
+    for (int j = 0; j < RECT_POINT_NUM - 1; j++)
     {
-      printf("Invalid points in rectangle, exiting program\n");
-      exit(1);
+      if (i == j)
+        continue;
+      if (isPointEqual(rect[i], rect[i + 1]) == 1)
+      {
+        printf("Invalid points in rectangle, exiting program\n");
+        exit(1);
+      }
     }
   }
 };

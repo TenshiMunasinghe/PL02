@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "parse.h"
 
 int main()
 {

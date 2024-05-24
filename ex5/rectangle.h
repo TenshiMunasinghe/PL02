@@ -3,7 +3,9 @@
 #include <stdio.h>
 #include "point.h"
 
-typedef Point Rectangle[4];
+#define RECT_POINT_NUM 4
+
+typedef Point Rectangle[RECT_POINT_NUM];
 
 typedef struct
 {
