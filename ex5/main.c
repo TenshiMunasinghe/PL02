@@ -15,8 +15,10 @@ int main()
   Lines lines;
   Rectangles rects;
 
+  int i = 0;
   while (parseInput(in, lines, rects))
   {
+    printf("%d\n", i++);
   }
   return EXIT_SUCCESS;
 }
