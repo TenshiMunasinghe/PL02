@@ -12,13 +12,12 @@ int main()
     return EXIT_FAILURE;
   }
 
-  Lines lines;
-  Rectangles rects;
+  Lines *pLines = initializeLines(20);
+  Rectangles *pRects = initializeRectangles(20);
 
-  int i = 0;
-  while (parseInput(in, lines, rects))
+  while (parseInput(in, pLines, pRects))
   {
-    printf("%d\n", i++);
   }
+
   return EXIT_SUCCESS;
 }

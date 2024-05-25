@@ -8,32 +8,48 @@ int isValidTypeChar(char ch);
 int isValidNameChar(char ch);
 int isValidNumChar(char ch);
 
-int parseInput(FILE *in, Lines lines, Rectangles rects)
+int parseInput(FILE *in, Lines *lines, Rectangles *rects)
 {
-  int error = 1; // 1 means no error
+  int error = 0; // 0 means no error
   int id;
-  char idStr[MAX_ID_DIGIT], type[MAX_TYPE], name[MAX_NAME], pointToken[256];
+  char idStr[MAX_ID_DIGIT], type[MAX_TYPE], name[MAX_NAME], pointToken[MAX_TOKEN_SIZE];
   Point p1, p2;
 
   double a, b, c, d; // for testing
 
   char ch = fgetc(in);
-  if (ch == '#')
-    ch = fgetc(in); // skip leading '#'
-  else
+  if (ch != '#')
     return 0;
 
-  error = getToken(in, idStr, MAX_ID_DIGIT, &isValidIdChar); // parse Id
+  error += getToken(in, idStr, MAX_ID_DIGIT, &isValidIdChar); // parse Id
+
   id = atoi(idStr);
 
-  error = getToken(in, type, MAX_TYPE, &isValidTypeChar); // parse type
-  error = getToken(in, name, MAX_NAME, &isValidNameChar); // parse name
+  error += getToken(in, type, MAX_TYPE, &isValidTypeChar); // parse type
+  error += getToken(in, name, MAX_NAME, &isValidNameChar); // parse name
 
-  getRestOfLineWithoutSpace(in, pointToken, 256);
+  getRestOfLineWithoutSpace(in, pointToken, 256); // get string like "(1.1,1.2)(2.3,3.4)"
 
-  parsePoints(pointToken, &p1, &p2);
+  error += parsePoints(pointToken, &p1, &p2);
 
-  if (error == 0) // if there is error in parsing input
+  if (strcmp(type, "line") == 0)
+  {
+    Line *line = addLine(lines, id);
+    strcpy(line->name, name);
+    computeLineFromPoints(line, p1, p2);
+  }
+  else if (strcmp(type, "rectangle") == 0)
+  {
+    Rectangle *rect = addRectangle(rects, id);
+    strcpy(rect->name, name);
+    computeRectFromPoints(rect, p1, p2);
+  }
+  else
+  {
+    error += 1;
+  }
+
+  if (error > 0) // if there is error in parsing input
   {
     printf("Error with reading input. Skipping line.\n");
     return 0;
@@ -44,7 +60,6 @@ int parseInput(FILE *in, Lines lines, Rectangles rects)
 
 int getToken(FILE *in, char *token, int limit, int (*isValid)(char))
 {
-
   char ch = fgetc(in);
 
   int ixLit = 0;
@@ -58,7 +73,7 @@ int getToken(FILE *in, char *token, int limit, int (*isValid)(char))
   while (!isspace(ch) && ch != EOF)
   {
     if (!isValid(ch))
-      return 0;
+      return 1;
 
     if (ixLit < limit)
     {
@@ -69,7 +84,7 @@ int getToken(FILE *in, char *token, int limit, int (*isValid)(char))
   }
   token[ixLit] = '\0';
 
-  return 1;
+  return 0;
 }
 
 int isValidIdChar(char ch)
@@ -114,7 +129,7 @@ void getRestOfLineWithoutSpace(FILE *in, char token[256], int limit)
 
 int parsePoints(char token[MAX_TOKEN_SIZE], Point *p1, Point *p2)
 {
-  if (sscanf(token, "(%lf,%lf)(%lf,%lf)", &(p1->x), &(p1->y), &(p2->x), &(p2->y)) == 4)
+  if (sscanf(token, "(%lf,%lf)(%lf,%lf)", &(p1->x), &(p1->y), &(p2->x), &(p2->y)) != 4)
     return 1;
   return 0;
 }
