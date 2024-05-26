@@ -4,14 +4,23 @@
 #include <stdlib.h>
 #include "point.h"
 #include "shape.h"
+#include "minmax.h"
 
 #define RECT_POINT_NUM 4
 
 typedef struct
 {
+  double min;
+  double max;
+} MinMax;
+
+typedef struct
+{
   int id;
   char name[MAX_NAME];
-  Point points[4];
+  MinMax x; // minimum and maximum value of x
+  MinMax y; // same for y
+  Point points[2];
 } Rectangle;
 
 typedef Rectangle *PRect;

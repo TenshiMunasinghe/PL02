@@ -5,17 +5,15 @@ int computeRectFromPoints(Rectangle *rect, Point p1, Point p2)
   if (!isRectangleValid(p1, p2))
     return 1;
 
+  rect->x.max = max(p1.x, p2.x);
+  rect->x.min = min(p1.x, p2.x);
+  rect->y.max = max(p1.y, p2.y);
+  rect->y.min = min(p1.y, p2.y);
+
   rect->points[0].x = p1.x;
   rect->points[0].y = p1.y;
-
-  rect->points[0].x = p2.x;
-  rect->points[0].y = p2.y;
-
-  rect->points[0].x = p1.x;
-  rect->points[0].y = p2.y;
-
-  rect->points[0].x = p2.x;
-  rect->points[0].y = p1.y;
+  rect->points[1].x = p2.x;
+  rect->points[1].y = p2.y;
 
   return 0;
 };
