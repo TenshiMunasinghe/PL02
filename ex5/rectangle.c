@@ -10,10 +10,26 @@ int computeRectFromPoints(Rectangle *rect, Point p1, Point p2)
   rect->y.max = max(p1.y, p2.y);
   rect->y.min = min(p1.y, p2.y);
 
-  rect->points[0].x = p1.x;
-  rect->points[0].y = p1.y;
-  rect->points[1].x = p2.x;
-  rect->points[1].y = p2.y;
+  // points go in clock-wise from top-left (0 => top-left, 1 => top-right, 2 => bottom-right, 3 => botton-left)
+  setPoint(&rect->points[0], rect->x.min, rect->y.max);
+  setPoint(&rect->points[1], rect->x.max, rect->y.max);
+  setPoint(&rect->points[2], rect->x.max, rect->y.min);
+  setPoint(&rect->points[3], rect->x.min, rect->y.min);
+
+  // edges go in clock-wise from top edge (0 => top, 1 => right, 2 => bottom, 3 => left)
+  // printPoint(rect->points[0]);
+  // printPoint(rect->points[1]);
+  // printPoint(rect->points[2]);
+  // printPoint(rect->points[3]);
+
+  // top edge
+  computeLineFromPoints(&rect->edges[0], (rect->points)[0], (rect->points)[1]);
+  // right edge
+  computeLineFromPoints(&rect->edges[1], (rect->points)[1], (rect->points)[2]);
+  // bottom edge
+  computeLineFromPoints(&rect->edges[2], (rect->points)[2], (rect->points)[3]);
+  // left edge
+  computeLineFromPoints(&rect->edges[3], (rect->points)[3], (rect->points)[0]);
 
   return 0;
 };

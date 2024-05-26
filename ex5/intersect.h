@@ -1,9 +1,11 @@
 #include "line.h"
 #include "rectangle.h"
-#include "minmax.h"
+#include "utils.h"
 
 #define INTERCEPT_THERESHOLD 0.01
 
-int computeLineIntercept(Line *line1, Line *line2);
-int isPointOnLine(Point p, Line line);
+int computeLineIntersect(LineProperties *line1, LineProperties *line2);
+int isPointOnLine(Point p, LineProperties line);
 double computeRectIntersectArea(Rectangle *r1, Rectangle *r2);
+int computeLineRectIntersect(LineProperties *properties, Rectangle *rect);
+int isPointInRect(Point p, Rectangle *rect);

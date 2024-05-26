@@ -36,7 +36,7 @@ int parseInput(FILE *in, Lines *lines, Rectangles *rects)
   {
     Line *line = addLine(lines, id);
     strcpy(line->name, name);
-    computeLineFromPoints(line, p1, p2);
+    computeLineFromPoints(&line->properties, p1, p2);
   }
   else if (strcmp(type, "rectangle") == 0)
   {
