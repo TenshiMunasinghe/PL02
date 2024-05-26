@@ -15,8 +15,11 @@ int main()
   Lines *pLines = initializeLines(20);
   Rectangles *pRects = initializeRectangles(20);
 
+  int count;
+
   while (parseInput(in, pLines, pRects))
   {
+    printf("Parsed line %d", count++);
   }
 
   return EXIT_SUCCESS;
