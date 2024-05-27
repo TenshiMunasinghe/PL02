@@ -36,14 +36,14 @@ int computeLineIntersect(Point l1[2], Point l2[2])
 
 int computeLineRectIntersect(Line *line, Rectangle *rect)
 { // check if a point of line segment is inside rectangle
-
   if (isPointInRect(line->points[0], rect) == 1 || isPointInRect(line->points[1], rect) == 1)
   {
     return 1;
   }
-  // check if the line segment intercept with edges
+  // check if the line segment intercept with edges of the rectangle
   for (int i = 0; i < 4; i++)
-  {
+  { // rectEdgePoints {points[0], points[1]} represent top edge of rectangle as points start from top-left and go clock-wise
+    // like wise, {points[1], points[2]} represent right edge and so on...
     Point rectEdgePoints[2] = {rect->points[i], rect->points[(i % 4)]};
     if (computeLineIntersect(line->points, rectEdgePoints) == 1)
       return 1;
