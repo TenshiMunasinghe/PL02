@@ -4,9 +4,8 @@
 
 #define INTERCEPT_THERESHOLD 0.01
 
-int computeLineIntersect(LineProperties *line1, LineProperties *line2);
-int isPointOnLine(Point p, LineProperties line);
+int computeLineIntersect(Point l1[2], Point l2[2]);
 double computeRectIntersectArea(Rectangle *r1, Rectangle *r2);
 int computeRectTouching(Rectangle *r1, Rectangle *r2);
-int computeLineRectIntersect(LineProperties *properties, Rectangle *rect);
+int computeLineRectIntersect(Line *line, Rectangle *rect);
 int isPointInRect(Point p, Rectangle *rect);

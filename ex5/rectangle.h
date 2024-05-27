@@ -19,10 +19,9 @@ typedef struct
 {
   int id;
   char name[MAX_NAME];
-  MinMax x;                // minimum and maximum value of x
-  MinMax y;                // same for y
-  Point points[4];         // points go in clock-wise from top-left (0 => top-left, 1 => top-right, 2 => bottom-right, 3 => botton-left)
-  LineProperties edges[4]; // edges go in clock-wise from top edge (0 => top, 1 => right, 2 => bottom, 3 => left)
+  MinMax x;        // minimum and maximum value of x
+  MinMax y;        // same for y
+  Point points[4]; // points go in clock-wise from top-left (0 => top-left, 1 => top-right, 2 => bottom-right, 3 => botton-left)
 } Rectangle;
 
 typedef Rectangle *PRect;

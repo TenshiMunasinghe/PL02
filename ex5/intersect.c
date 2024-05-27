@@ -1,43 +1,51 @@
 #include "intersect.h"
 
-int computeLineIntersect(LineProperties *line1, LineProperties *line2)
+int computeLineIntersect(Point l1[2], Point l2[2])
 {
+  double a1 = l1[1].y - l1[0].y;
+  double b1 = l1[0].x - l1[1].x;
+  double c1 = a1 * l1[0].x + b1 * l1[0].y;
 
-  if (compareDouble((line1->a / line1->b), (line2->a / line2->b)) == 1) // gradient is equal
+  double a2 = l2[1].y - l2[0].y;
+  double b2 = l2[0].x - l2[1].x;
+  double c2 = a2 * l2[0].x + b2 * l2[0].y;
+
+  double determinant = a1 * b2 - a2 * b1;
+
+  if (determinant == 0)
   {
+    // The lines are parallel
     return 0;
   }
+  else
+  {
+    double x = (b2 * c1 - b1 * c2) / determinant;
+    double y = (a1 * c2 - a2 * c1) / determinant;
 
-  Point intercept;
-  intercept.y = (line2->a - line1->a) * line2->c / ((line2->a * line1->b) - (line2->b * line1->a));
-  intercept.x = (line1->c - line1->b * intercept.y) / line1->a;
-
-  if (isPointOnLine(intercept, *line1) == 0) // check if intercept is on a line
-    return 0;
-
-  return 1;
+    // Check if the intersection point (x, y) lies on both line segments
+    if (x >= min(l1[0].x, l1[1].x) && x <= max(l1[0].x, l1[1].x) &&
+        y >= min(l1[0].y, l1[1].y) && y <= max(l1[0].y, l1[1].y) &&
+        x >= min(l2[0].x, l2[1].x) && x <= max(l2[0].x, l2[1].x) &&
+        y >= min(l2[0].y, l2[1].y) && y <= max(l2[0].y, l2[1].y))
+    {
+      return 1;
+    }
+  }
+  return 0;
 }
 
-int isPointOnLine(Point p, LineProperties line)
-{
-  if (p.x < min(line.points[0].x, line.points[1].x) || p.x > max(line.points[0].x, line.points[1].x)) // check whether x is in range
-    return 0;
-
-  if (p.y < min(line.points[0].y, line.points[1].y) || p.y > max(line.points[0].y, line.points[1].y)) // check whether y is in range
-    return 0;
-
-  return 1;
-};
-
-int computeLineRectIntersect(LineProperties *properties, Rectangle *rect)
+int computeLineRectIntersect(Line *line, Rectangle *rect)
 { // check if a point of line segment is inside rectangle
-  if (isPointInRect(properties->points[0], rect) == 1 || isPointInRect(properties->points[1], rect))
-    return 1;
 
+  if (isPointInRect(line->points[0], rect) == 1 || isPointInRect(line->points[1], rect) == 1)
+  {
+    return 1;
+  }
   // check if the line segment intercept with edges
   for (int i = 0; i < 4; i++)
   {
-    if (computeLineIntersect(properties, &(rect->edges[i])) == 1)
+    Point rectEdgePoints[2] = {rect->points[i], rect->points[(i % 4)]};
+    if (computeLineIntersect(line->points, rectEdgePoints) == 1)
       return 1;
   }
 
@@ -48,7 +56,9 @@ int isPointInRect(Point p, Rectangle *rect)
 {
   // check if p is within the ranges of x and y
   if (p.x > rect->x.min && p.x < rect->x.max && p.y > rect->y.min && p.y < rect->y.max)
+  {
     return 1;
+  }
   return 0;
 }
 

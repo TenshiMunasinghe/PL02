@@ -9,18 +9,9 @@
 
 typedef struct
 {
-  // In form of ax+by=c
-  double a;
-  double b;
-  double c;
-  Point points[2];
-} LineProperties;
-
-typedef struct
-{
   int id;
   char name[MAX_NAME];
-  LineProperties properties;
+  Point points[2];
 } Line;
 
 typedef Line *PLine;
@@ -32,8 +23,9 @@ typedef struct
   int lastIndex;
 } Lines;
 
-int computeLineFromPoints(LineProperties *line, Point p1, Point p2);
+int computeLineFromPoints(Line *line, Point p1, Point p2);
 Lines *initializeLines(int size);
 void freeLines(Lines *pList);
 Line *addLine(Lines *pList, const int id);
 int searchLineById(Lines *pList, int id);
+void printLine(Line *line);
