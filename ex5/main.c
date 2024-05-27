@@ -69,6 +69,11 @@ int main()
         printf("#%d (%s) intercepts with #%d (%s) producing common area %lf\n",
                pRects->all[i]->id, pRects->all[i]->name, pRects->all[j]->id, pRects->all[j]->name, commonArea);
       }
+      else if (computeRectTouching(pRects->all[i], pRects->all[j]) == 1)
+      {
+        printf("#%d (%s) intercepts with #%d (%s) producing common area 0\n",
+               pRects->all[i]->id, pRects->all[i]->name, pRects->all[j]->id, pRects->all[j]->name);
+      }
     }
   }
   return EXIT_SUCCESS;
