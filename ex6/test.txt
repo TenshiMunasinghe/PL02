@@ -1,0 +1,8 @@
+#1 rectangle green (-2, -1) ( 3, 3 )
+#9 rectangle red (5, 0) (8.5,3)
+#7 line yellow (0,5) (5,0)
+#4 line green (-2, 2) ( 0, 0)
+#8 rectangle red (4.5, 1) (8,4)
+#6 line transparent (0,3) (3,0)
+#2 rectangle green (2,-3) (5,2)
+#5 line yellow (7,0) (7,10)

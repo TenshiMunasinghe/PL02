@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "*.css": "css",
+    "css": "css",
+    "point.h": "c",
+    "line.h": "c",
+    "stdlib.h": "c",
+    "rectangle.h": "c",
+    "chrono": "c",
+    "random": "c",
+    "limits": "c",
+    "semaphore": "c"
+  }
+}
