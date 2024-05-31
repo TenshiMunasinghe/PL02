@@ -1,6 +1,6 @@
 #include "colors.h"
 
-int parseColors(ColorArr colorArray)
+void parseColors(ColorArr colorArray)
 {
   int error;
   FILE *in = fopen("colors.txt", "rt");
