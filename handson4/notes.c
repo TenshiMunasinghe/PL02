@@ -50,7 +50,7 @@ int main(int argc, string argv[])
         printf("%3s: %i\n", note, f);
 
         // Write (eighth) note to file
-        note_write(s, f, 1, 100);
+        note_write(s, f, 1);
     }
 
     // Close file

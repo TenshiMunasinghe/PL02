@@ -39,24 +39,12 @@ int main(int argc, string argv[])
         }
         else
         {
-            // Parse line into note and duration/velocity
-            string note_str = strtok(line, "@");
+            // Parse line into note and duration
+            string note = strtok(line, "@");
             string fraction = strtok(NULL, "@");
-            string velocity_str = strtok(NULL, "@");
-
-            // Check if parsing was successful
-            if (note_str == NULL || fraction == NULL)
-            {
-                fprintf(stderr, "Invalid note format. Expected format: NOTE@DURATION[@VELOCITY]\n");
-                continue;
-            }
-
-            // Get duration and velocity
-            int dur = duration(fraction);
-            int vel = velocity(velocity_str);
 
             // Write note to song
-            note_write(s, frequency(note_str), dur, vel);
+            note_write(s, frequency(note), duration(fraction));
         }
     }
 
