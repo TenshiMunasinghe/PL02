@@ -30,19 +30,19 @@
 // Represents a WAV header
 struct wav_header
 {
-    char riff_tag[4];         // "RIFF"
-    int32_t riff_length;      // Size of RIFF header
-    char wave_tag[4];         // "WAVE"
-    char fmt_tag[4];          // "fmt ", start of format data
-    int32_t fmt_length;       // Size of fmt subchunk
-    int16_t audio_format;     // Audio compression format
-    int16_t num_channels;     // Number of audio channels
-    int32_t sample_rate;      // Samples of audio per second
+    char riff_tag[4];        // "RIFF"
+    int32_t riff_length;     // Size of RIFF header
+    char wave_tag[4];        // "WAVE"
+    char fmt_tag[4];         // "fmt ", start of format data
+    int32_t fmt_length;      // Size of fmt subchunk
+    int16_t audio_format;    // Audio compression format
+    int16_t num_channels;    // Number of audio channels
+    int32_t sample_rate;     // Samples of audio per second
     int32_t byte_rate;       // Bytes per second
-    int16_t block_align;      // Bytes for one sample
-    int16_t bits_per_sample;  // Bits  for one sample
-    char data_tag[4];         // "data", start of sound data
-    int32_t data_length;      // Size of sound data
+    int16_t block_align;     // Bytes for one sample
+    int16_t bits_per_sample; // Bits  for one sample
+    char data_tag[4];        // "data", start of sound data
+    int32_t data_length;     // Size of sound data
 };
 
 // Opens a new file and populates it with WAV header
@@ -120,7 +120,7 @@ song song_open(string filename)
 
 // Append note to end of array of notes in song
 // Each duration unit is an eighth note at 120bpm
-bool note_write(song s, int frequency, int duration)
+bool note_write(song s, int frequency, int duration, int velocity)
 {
     // Increase size of song if necessary
     if (s->size == s->capacity)
@@ -146,6 +146,7 @@ bool note_write(song s, int frequency, int duration)
     }
     n->frequency = frequency;
     n->duration = duration;
+    n->velocity = velocity;
 
     // Add note to song
     s->notes[s->size] = n;
@@ -158,7 +159,7 @@ bool note_write(song s, int frequency, int duration)
 // Add a frequency of 0 to represent a rest in the song
 bool rest_write(song s, int duration)
 {
-    return note_write(s, 0, duration);
+    return note_write(s, 0, duration, 0);
 }
 
 // Compute wavforms based on note frequency and save to disk
@@ -189,14 +190,18 @@ bool song_close(song s)
         double phase_step = n->frequency * 2.0 * M_PI / WAV_SAMPLES_PER_SECOND;
         short *note_end = current_sample + n->duration * BEAT_LEN - SILENCE_DURATION;
         short *decay_start = note_end - DECAY_DURATION;
+
+        // Calculate volume based on velocity (0-127 to 0-1 range)
+        double volume = (double)n->velocity / 127.0 * VOLUME;
+
         for (; current_sample != decay_start; phase += phase_step)
         {
-            *current_sample++ = round(VOLUME * sin(phase));
+            *current_sample++ = round(volume * sin(phase));
         }
         for (; current_sample != note_end; phase += phase_step)
         {
-            double t = (double) (current_sample - decay_start) / BEAT_LEN;
-            *current_sample++ = round(VOLUME * pow(M_E, t * DECAY_FACTOR) * sin(phase));
+            double t = (double)(current_sample - decay_start) / BEAT_LEN;
+            *current_sample++ = round(volume * pow(M_E, t * DECAY_FACTOR) * sin(phase));
         }
 
         // Skip over silence at end of note

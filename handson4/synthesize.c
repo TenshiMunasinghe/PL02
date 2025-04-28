@@ -39,12 +39,13 @@ int main(int argc, string argv[])
         }
         else
         {
-            // Parse line into note and duration
+            // Parse line into note, duration, and velocity
             string note = strtok(line, "@");
             string fraction = strtok(NULL, "@");
+            string velocity_str = strtok(NULL, "@");
 
             // Write note to song
-            note_write(s, frequency(note), duration(fraction));
+            note_write(s, frequency(note), duration(fraction), velocity(velocity_str));
         }
     }
 

@@ -2,6 +2,9 @@
 
 #include "cs50.h"
 
+// Handles parsing of velocity
+int velocity(string velocity_str);
+
 // Converts a fraction to eighths
 int duration(string fraction);
 

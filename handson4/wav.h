@@ -12,8 +12,8 @@ typedef struct note
 {
     int frequency;
     int duration;
-}
-note;
+    int velocity; // 0-127 MIDI velocity
+} note;
 
 // Representation of a song
 struct song
@@ -26,8 +26,8 @@ struct song
 };
 typedef struct song *song;
 
-// Adds a note to a song for a given duration (in eighths)
-bool note_write(song s, int frequency, int duration);
+// Adds a note to a song for a given duration (in eighths) and velocity (0-127)
+bool note_write(song s, int frequency, int duration, int velocity);
 
 // Adds a rest to a song for a given duration (in eighths)
 bool rest_write(song s, int duration);

@@ -7,6 +7,19 @@
 
 #include "helpers.h"
 
+// start ADDED
+int velocity(string velocity_str)
+{
+    // Default velocity to 100 if not specified
+    int velocity = velocity_str ? atoi(velocity_str) : 100;
+    if (velocity < 0)
+        velocity = 0;
+    if (velocity > 127)
+        velocity = 127;
+    return velocity;
+}
+// end ADDED
+
 // Converts a fraction formatted as X/Y to eighths
 int duration(string fraction)
 {
