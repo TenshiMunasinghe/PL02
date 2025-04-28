@@ -3,37 +3,41 @@
 // Creative Commons Attribution license.
 // https://creativecommons.org/licenses/by/4.0/
 
+#ifndef WAV_H
+#define WAV_H
+
 #include "cs50.h"
 #include <stdio.h>
 #include <inttypes.h>
 
-// Representation of a note
+// Represents a note in a song
 typedef struct note
 {
-    int frequency;
-    int duration;
-}
-note;
+    int frequency; // Frequency in Hz
+    int duration;  // Duration in eighths
+    int velocity;  // Velocity (1-127)
+} note;
 
-// Representation of a song
-struct song
+// Represents a song
+typedef struct song
 {
-    string filename;
-    note **notes;
-    size_t capacity;
-    size_t size;
-    int duration;
-};
-typedef struct song *song;
+    string filename; // Name of WAV file
+    note **notes;    // Array of notes
+    size_t size;     // Number of notes
+    size_t capacity; // Capacity of array
+    size_t duration; // Total duration in eighths
+} *song;
 
-// Adds a note to a song for a given duration (in eighths)
-bool note_write(song s, int frequency, int duration);
+// Opens a new song
+song song_open(string filename);
 
-// Adds a rest to a song for a given duration (in eighths)
+// Writes a note to a song
+bool note_write(song s, int frequency, int duration, int velocity);
+
+// Writes a rest to a song
 bool rest_write(song s, int duration);
 
-// Saves a song to disk
+// Closes a song
 bool song_close(song s);
 
-// Creates a new song
-song song_open(string filename);
+#endif
