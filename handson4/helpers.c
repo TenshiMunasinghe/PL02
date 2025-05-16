@@ -10,8 +10,10 @@
 // start ADDED
 int velocity(string velocity_str)
 {
+    if (velocity_str == NULL)
+        return 0;
     // Default velocity to 100 if not specified
-    int velocity = velocity_str ? atoi(velocity_str) : 100;
+    int velocity = atoi(velocity_str);
     if (velocity < 0)
         velocity = 0;
     if (velocity > 127)
@@ -20,14 +22,17 @@ int velocity(string velocity_str)
 }
 // end ADDED
 
-// Converts a fraction formatted as X/Y to eighths
+// Converts a fraction formatted as X/Y to 32ths
 int duration(string fraction)
 {
+    if (fraction == NULL)
+        return 0;
+
     int numerator, denominator;
 
     sscanf(fraction, "%d/%d", &numerator, &denominator);
 
-    return (numerator * 8) / denominator;
+    return (numerator * 32) / denominator;
 }
 
 // Calculates frequency (in Hz) of a note
@@ -77,13 +82,39 @@ int frequency(string note)
 
     char octave[2] = {note[strPos], '\0'}; // convert char to string
     frequency *= pow(2, atof(octave));     // here, note[strPos] is the number before '@'
-
-    return (int)frequency; // The program did not work on university computer octaves 3 and below although the calculated frequencies are correct.
+    return (int)frequency;                 // The program did not work on university computer octaves 3 and below although the calculated frequencies are correct.
 }
 
 // Determines whether a string represents a rest
 bool is_rest(string s)
 {
-    // TODO
-    return strcmp(s, "\0") == 0;
+    if (s == NULL)
+        return false;
+
+    // Check if it starts with "rest@"
+    if (strncmp(s, "rest@", 5) == 0 || strcmp(s, "\0") == 0) // For backward compatibility, also check for empty string
+        return true;
+
+    return false;
+}
+
+// Parses duration from a rest string (e.g., "rest@1/4" returns 2)
+int parse_rest_duration(string s)
+{
+    if (s == NULL)
+        return 1; // Default to 1/8 for backward compatibility
+
+    // If it's an empty string, return 1 (1/8)
+    if (strcmp(s, "\0") == 0)
+    {
+        return 1;
+    }
+
+    // Parse duration from "rest@X/Y" format
+    char *fraction = strchr(s, '@');
+    if (fraction == NULL)
+        return 1;
+
+    fraction++; // Skip the @
+    return duration(fraction);
 }

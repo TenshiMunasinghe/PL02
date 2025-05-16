@@ -16,3 +16,6 @@ int frequency(string note);
 
 // Determines whether a string represents a rest
 bool is_rest(string s);
+
+// Parses duration from a rest string (e.g., "rest@1/4" returns 2)
+int parse_rest_duration(string s);

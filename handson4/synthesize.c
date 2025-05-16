@@ -35,7 +35,8 @@ int main(int argc, string argv[])
         // Check if line is rest
         if (is_rest(line))
         {
-            rest_write(s, 1);
+            rest_write(s, parse_rest_duration(line));
+            printf("working :%s\n", line);
         }
         else
         {
@@ -43,7 +44,16 @@ int main(int argc, string argv[])
             string note = strtok(line, "@");
             string fraction = strtok(NULL, "@");
             string velocity_str = strtok(NULL, "@");
-
+            if (note == NULL)
+            {
+                printf("note is NULL\n");
+                continue;
+            }
+            if (fraction == NULL)
+            {
+                printf("fraction is NULL\n");
+                continue;
+            }
             // Write note to song
             note_write(s, frequency(note), duration(fraction), velocity(velocity_str));
         }
